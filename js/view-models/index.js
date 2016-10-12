@@ -1,11 +1,63 @@
 // Here's my data model
 var IndexViewModel = function() {
     this.sampleText2 = ko.observable();
-	this.loggedUserName = ko.observable('User001');
-	this.lists = ko.observableArray([
-	{name: 'Lista 1', tasks: [{name: 'Task 1'},{name: 'Task 2'},{name: 'Task 3'},{name: 'Task 4'}]}, {name: 'Lista 2', tasks: [{name: 'Task 1'},{name: 'Task 2'}]}
-	]);
-	this.board = ko.observable({name: 'Board 1'});
+	this.loggedUserName = ko.observable('');
+	this.lists = ko.observableArray([]);
+	this.board = ko.observable({});
+	
+	var apiPrefix = 'http://localhost:8080/REST/web/app_dev.php/api/';
+	
+	var self = this;
+	
+	//TODO: Refaktoryzacja celem przygotowania obiektu API bez każdorazowego wywołania $.ajax
+	$.ajax({
+		url: apiPrefix + 'boards/1',
+		dataType: 'json',
+		method: 'GET'
+	}).done(function(data){
+		self.board(data);
+		$.ajax({
+			url: apiPrefix + 'boards/1/lists',
+			dataType: 'json',
+			method: 'GET'
+		}).done(function(data){
+			var lists = [];
+			for (var i = 0; i < data.length; i++)
+			{
+				lists.push({name: data[i].name, tasks: ko.observableArray([])});
+				(function(){
+					var iCopy = i;
+					$.ajax({
+						url: apiPrefix + 'lists/' + data[iCopy].id + '/tasks',
+						dataType: 'json',
+						method: 'GET'
+					}).done(function(data){
+						for (var i = 0; i < data.length; i++)
+						{
+							self.lists()[iCopy].tasks.push(data[i]);
+						}
+					}).fail(function(error){
+						console.error(error);
+					});
+				})();
+			}
+			self.lists(lists);
+		}).fail(function(error){
+			console.error(error);
+		});
+	}).fail(function(error){
+		console.error(error);
+	});
+	
+	$.ajax({
+		url: apiPrefix + 'loggeduser',
+		dataType: 'json',
+		method: 'GET'
+	}).done(function(data){
+		self.loggedUserName(data.name);
+	}).fail(function(error){
+		console.error(error);
+	});
  
     this.sampleText = ko.pureComputed(function() {
         return '> ' + this.sampleText2() + ' <';
