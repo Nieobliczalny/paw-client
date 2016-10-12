@@ -52,8 +52,28 @@
     <div class="container">
 
       <div class="starter-template">
-        <h1>Szablon startowy</h1>
-        <p class="lead">Quick start - główna strona</p>
+        <h1 data-bind="text: board().name">...</h1>
+        <p class="lead">Zalogowany jako: <span data-bind="text: loggedUserName"></span></p>
+		<table class="table">
+			<thead>
+				<tr data-bind="foreach: lists">
+					<th data-bind="text: name"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-bind="foreach: lists">
+					<td>
+						<table class="table">
+							<tbody data-bind="foreach: tasks">
+								<tr>
+									<td data-bind="text: name"></td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 		<input type="text" data-bind="value: sampleText2" />
 		<p data-bind="text: sampleText"></p>
       </div>
