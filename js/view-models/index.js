@@ -5,9 +5,16 @@ var IndexViewModel = function() {
 	this.lists = ko.observableArray([]);
 	this.board = ko.observable({});
 	
-	var apiPrefix = 'http://localhost:8080/REST/web/app_dev.php/api/';
+	var apiPrefix = 'http://localhost/paw-server/web/app_dev.php/api/';
 	
 	var self = this;
+	
+	$.ajax({
+		url: apiPrefix + 'logins',
+		dataType: 'json',
+		method: 'POST',
+		data: {login: 'Adam', password: 'admin'}
+	})
 	
 	//TODO: Refaktoryzacja celem przygotowania obiektu API bez każdorazowego wywołania $.ajax
 	$.ajax({
@@ -54,7 +61,7 @@ var IndexViewModel = function() {
 		dataType: 'json',
 		method: 'GET'
 	}).done(function(data){
-		self.loggedUserName(data.name);
+		self.loggedUserName(data.username);
 	}).fail(function(error){
 		console.error(error);
 	});
