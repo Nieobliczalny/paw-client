@@ -65,8 +65,8 @@ function RestResource(apiPrefix, resourceName, options, childResources)
 			var parentObj = [];
 			for (var i = 0; i < resource.length; i++)
 			{
-				if (typeof resource[i] == 'string') parentObj.push(parseObjectStructure(resource[i], options));
-				else parentObj = parentObj.concat(parseObjectStructure(resource[i], options));
+				if (typeof resource[i] == 'string') parentObj.push(this.parseObjectStructure(resource[i], options));
+				else parentObj = parentObj.concat(this.parseObjectStructure(resource[i], options));
 			}
 			return parentObj;
 		}
@@ -76,7 +76,7 @@ function RestResource(apiPrefix, resourceName, options, childResources)
 			var keys = Object.keys(resource);
 			for (var i = 0; i < keys.length; i++)
 			{
-				var childData = parseObjectStructure(resource[keys[i]], options);
+				var childData = this.parseObjectStructure(resource[keys[i]], options);
 				if (typeof resource[keys[i]] == 'string') childData = [childData];
 				parentObj.push({name: keys[i], options: options, children: childData});
 			}
@@ -91,6 +91,7 @@ function RestResource(apiPrefix, resourceName, options, childResources)
 		var childResource = {};
 		var newPrefix = this.apiPrefix;
 		if (this.resourceName.length > 0) newPrefix = newPrefix + this.resourceName + '/';
+		if (typeof resourceID == 'string') resourceID = parseInt(resourceID);
 		if (typeof resourceID == 'number') newPrefix = newPrefix + parseInt(resourceID) + '/';
 		for (var i = 0; i < this.childResources.length; i++)
 		{
@@ -111,3 +112,6 @@ function TrelloRestService(apiPrefix)
 	this.user = new RestResource(apiPrefix, 'user');
 	this.logins = new RestResource(apiPrefix, 'logins');
 }
+
+var apiPrefix = 'http://localhost:8080/paw-server/web/app_dev.php/api/';
+var TrelloApi = new TrelloRestService(apiPrefix);
