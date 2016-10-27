@@ -10,7 +10,7 @@
 		<tr data-bind="foreach: lists">
 			<td>
 				<table class="table">
-					<tbody data-bind="foreach: tasks">
+					<tbody data-bind="foreach: cards">
 						<tr>
 							<td><span data-bind="text: name"></span> <a data-bind="click: $parentContext.$parent.editCardName">[Zmień nazwę]</a> <a data-bind="click: $parentContext.$parent.editCardDescription">[Zmień opis]</a> <a data-bind="click: $parentContext.$parent.deleteCard">[Usuń]</a></td>
 						</tr>

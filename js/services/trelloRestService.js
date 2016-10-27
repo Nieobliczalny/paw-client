@@ -106,12 +106,13 @@ function TrelloRestService(apiPrefix)
 	this.boards = new RestResource(apiPrefix, 'boards');
 	this.boards.addChildResource('lists');
 	this.lists = new RestResource(apiPrefix, 'lists');
-	this.lists.addChildResource('tasks');
+	this.lists.addChildResource('cards');
+	this.cards = new RestResource(apiPrefix, 'cards');
 	//this.boards.setChildResources({'lists':'tasks'}) //sample multistructure:, {'lists':'tasks', 'test':[{'test2':'test3'}, 'test4'], 'xd':['xd1', 'xd2']}
 	this.loggeduser = new RestResource(apiPrefix, 'loggeduser');
 	this.user = new RestResource(apiPrefix, 'user');
 	this.logins = new RestResource(apiPrefix, 'logins');
 }
 
-var apiPrefix = 'http://localhost:8080/paw-server/web/app_dev.php/api/';
+var apiPrefix = 'http://localhost/paw-server/web/app_dev.php/api/';
 var TrelloApi = new TrelloRestService(apiPrefix);

@@ -13,18 +13,18 @@ var BoardViewModel = function(){
 		self.board({});
 		TrelloApi.boards.getById(self.boardId, function(result){
 			self.board(result);
-			console.info(self.boardId);
+			//console.info(self.boardId);
 			TrelloApi.boards.at(self.boardId).lists.get(function(data){
 				var lists = [];
 				for (var i = 0; i < data.length; i++)
 				{
-					lists.push({id: data[i].id, name: data[i].name, tasks: ko.observableArray([])});
+					lists.push({id: data[i].id, name: data[i].name, cards: ko.observableArray([])});
 					(function(){
 						var iCopy = i;
-						TrelloApi.lists.at(data[i].id).tasks.get(function(result){
+						TrelloApi.lists.at(data[i].id).cards.get(function(result){
 							for (var i = 0; i < result.length; i++)
 							{
-								self.lists()[iCopy].tasks.push(result[i]);
+								self.lists()[iCopy].cards.push(result[i]);
 							}
 						}, function(error){
 							console.error(error);
