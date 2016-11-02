@@ -10,13 +10,36 @@ var StartViewModel = function() {
 		});
 	};
 	this.addTable = function(){
-		console.log('Not implemented - dodaj tablicę');
+		var name = prompt('Podaj nazwę tablicy: ');
+		if (name)
+		{
+			TrelloApi.boards.post({name: name}, function(result){
+				self.boards.push(result);
+			}, function(error){
+				console.error(error);
+			});
+		}
 	};
 	this.renameTable = function(obj){
-		console.log('Not implemented - zmień nazwę tablicy - ', obj.id);
+		var name = prompt('Podaj nazwę tablicy: ');
+		if (name)
+		{
+			TrelloApi.boards.put(obj.id, {name: name}, function(result){
+				var board = self.boards().filter(function(e, i, a){ return e.id == result.id; });
+				if (board.length > 0) self.boards.splice(self.boards.indexOf(board[0]), 1, result);
+				else self.boards.push(result);
+			}, function(error){
+				console.error(error);
+			});
+		}
 	};
 	this.deleteTable = function(obj){
-		console.log('Not implemented - usuń tablicę - ', obj.id);
+		TrelloApi.boards.delete(obj.id, function(result){
+			var board = self.boards().filter(function(e, i, a){ return e.id == obj.id; });
+			if (board.length > 0) self.boards.splice(self.boards.indexOf(board[0]), 1);
+		}, function(error){
+			console.error(error);
+		});
 	};
 };
 
