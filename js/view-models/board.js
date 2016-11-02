@@ -70,7 +70,7 @@ var BoardViewModel = function(){
 		}
 	};
 	this.unarchiveList = function(obj){
-		TrelloApi.lists.put(obj.id, {archived: false}, function(result){
+		TrelloApi.lists.put(obj.id, {archived: 0}, function(result){
 			var list = self.lists().filter(function(e, i, a){ return e.id == result.id; });
 			result.cards = ko.observableArray(result.cards);
 			if (list.length > 0) self.lists.splice(self.lists.indexOf(list[0]), 1, result);
@@ -80,7 +80,7 @@ var BoardViewModel = function(){
 		});
 	};
 	this.archiveList = function(obj){
-		TrelloApi.lists.put(obj.id, {archived: true}, function(result){
+		TrelloApi.lists.put(obj.id, {archived: 1}, function(result){
 			var list = self.lists().filter(function(e, i, a){ return e.id == result.id; });
 			result.cards = ko.observableArray(result.cards);
 			if (list.length > 0) self.lists.splice(self.lists.indexOf(list[0]), 1, result);
@@ -144,7 +144,7 @@ var BoardViewModel = function(){
 		}
 	};
 	this.unarchiveCard = function(obj){
-		TrelloApi.cards.put(obj.id, {archived: false}, function(result){
+		TrelloApi.cards.put(obj.id, {archived: 0}, function(result){
 			var list = self.lists().filter(function(e, i, a){ return e.id == obj.card_list.id; });
 			if (list.length > 0)
 			{
@@ -157,7 +157,7 @@ var BoardViewModel = function(){
 		});
 	};
 	this.archiveCard = function(obj){
-		TrelloApi.cards.put(obj.id, {archived: true}, function(result){
+		TrelloApi.cards.put(obj.id, {archived: 1}, function(result){
 			var list = self.lists().filter(function(e, i, a){ return e.id == obj.card_list.id; });
 			if (list.length > 0)
 			{
