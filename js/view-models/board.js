@@ -174,7 +174,7 @@ var BoardViewModel = function(){
 			var list = self.lists().filter(function(e, i, a){ return e.id == obj.card_list.id; });
 			if (list.length > 0)
 			{
-				var card = list[0].cards().filter(function(e, i, a){ return e.id == result.id; });
+				var card = list[0].cards().filter(function(e, i, a){ return e.id == obj.id; });
 				if (card.length > 0) list[0].cards.splice(list[0].cards.indexOf(card[0]), 1);
 			}
 		}, function(error){

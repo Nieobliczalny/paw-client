@@ -1,7 +1,8 @@
 ﻿<h1>Dostępne tablice</h1>
-<a data-bind="click: addTable">Dodaj tablicę</a>
+<a data-bind="click: addTable">Dodaj tablicę</a><br>
+Filtruj: <input type="text" data-bind="textInput: filter">
 <table class="table">
-	<tbody data-bind="foreach: boards">
+	<tbody data-bind="foreach: boardsFiltered">
 		<tr>
 			<td><a data-bind="text: name, page-href: {path: '../board', params: {boardId: id}}"></a> <a data-bind="click: $parent.renameTable">[Zmień nazwę]</a> <a data-bind="click: $parent.deleteTable">[Usuń]</a></td>
 		</tr>
