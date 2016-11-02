@@ -114,5 +114,5 @@ function TrelloRestService(apiPrefix)
 	this.logins = new RestResource(apiPrefix, 'logins');
 }
 
-var apiPrefix = 'http://localhost/paw-server/web/app_dev.php/api/';
+var apiPrefix = 'http://localhost:8080/paw-server/web/app_dev.php/api/';
 var TrelloApi = new TrelloRestService(apiPrefix);

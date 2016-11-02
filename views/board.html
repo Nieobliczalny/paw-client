@@ -3,7 +3,7 @@
 <table class="table">
 	<thead>
 		<tr data-bind="foreach: lists">
-			<th><span data-bind="text: name"></span> <a data-bind="click: $parent.addCardToList">[Dodaj kartę]</a> <a data-bind="click: $parent.renameList">[Zmień nazwę]</a> <a data-bind="click: $parent.archiveList">[Archiwizuj]</a> <a data-bind="click: $parent.deleteList">[Usuń]</a></th>
+			<th><span data-bind="text: name"></span> <a data-bind="click: $parent.addCardToList, visible: !$data.archived">[Dodaj kartę]</a> <a data-bind="click: $parent.renameList, visible: !$data.archived">[Zmień nazwę]</a> <a data-bind="click: $parent.archiveList, visible: !$data.archived">[Archiwizuj]</a> <a data-bind="click: $parent.unarchiveList, visible: $data.archived">[Przywróć]</a> <a data-bind="click: $parent.deleteList, visible: $data.archived">[Usuń]</a></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -12,7 +12,7 @@
 				<table class="table">
 					<tbody data-bind="foreach: cards">
 						<tr>
-							<td><span data-bind="text: name"></span> <a data-bind="click: $parentContext.$parent.editCardName">[Zmień nazwę]</a> <a data-bind="click: $parentContext.$parent.editCardDescription">[Zmień opis]</a> <a data-bind="click: $parentContext.$parent.deleteCard">[Usuń]</a></td>
+							<td><span data-bind="text: name"></span> <a data-bind="click: $parentContext.$parent.editCardName, visible: !$data.archived">[Zmień nazwę]</a> <a data-bind="click: $parentContext.$parent.editCardDescription, visible: !$data.archived">[Zmień opis]</a> <a data-bind="click: $parentContext.$parent.archiveCard, visible: !$data.archived">[Archiwizuj]</a> <a data-bind="click: $parentContext.$parent.unarchiveCard, visible: $data.archived">[Przywróć]</a> <a data-bind="click: $parentContext.$parent.deleteCard, visible: $data.archived">[Usuń]</a></td>
 						</tr>
 					</tbody>
 				</table>
