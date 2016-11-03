@@ -762,6 +762,7 @@
             if (urlToggle !== 'none') {
                 m.parentPage = m.getParentPage();
                 m.parentPage.children.push(this);
+				m.isVisible(false);
                 m.hideElement();
             }
 
@@ -981,7 +982,7 @@
             var loader = null;
             var loaderMethod = value.loader || pager.loader;
 			if (!me.val('withOnShow')) {
-				me.showElementWrapper(showCallback);
+				if (me.isVisible()) me.showElementWrapper(showCallback);
 			}
             if (value.frame === 'iframe') {
                 var iframe = $('iframe', $(element));
