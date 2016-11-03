@@ -40,7 +40,7 @@ var StartViewModel = function() {
 	};
 	this.deleteTable = function(obj){
 		TrelloApi.boards.delete(obj.id, function(result){
-			var board = self.boards().filter(function(e, i, a){ return e.id == obj.id; });
+			var board = self.boards.filter(function(e, i, a){ return e.id == obj.id; });
 			if (board.length > 0) self.boards.splice(self.boards.indexOf(board[0]), 1);
 			self.boardsFiltered(self.applyFilter(self.boards, self.filter()));
 		}, function(error){
