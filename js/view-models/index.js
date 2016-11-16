@@ -2,6 +2,14 @@
 var IndexViewModel = function() {
 	this.loggedUserName = ko.observable('Gość');
 	this.loggedUserID = -1;
+	this.isLoggedUser = ko.pureComputed(function(){
+		return this.loggedUserName() != 'Gość';
+	}, this);
+
+	this.isNotLoggedUser = ko.pureComputed(function(){
+		return this.loggedUserName() == 'Gość';
+	}, this);
+
 	var self = this;
 	TrelloApi.logins.post({login: 'Adam', password: 'admin'}, function(data){
 		self.loggedUserName(data.username);
@@ -20,7 +28,14 @@ var IndexViewModel = function() {
 	//TrelloApi.cards.post({name: 'Carddddd 1', listID: 1}, function(result){console.log(result);}, function(error){console.error(error);})
 	//TrelloApi.cards.put(1, {name: 'Nowa nazwa card'}, function(result){console.log(result);}, function(error){console.error(error);})
 	//TrelloApi.cards.delete(1, function(result){console.log(result);}, function(error){console.error(error);});
-	
+
+	this.loggoutClick = function(){
+		//TODO wylogowywanie
+		self.loggedUserName('Gość');
+		self.loggedUserID= -1;
+	};
+
+
 	TrelloApi.loggeduser.get(function(data){
 		self.loggedUserName(data.username);
 		self.loggedUserID = data.id;
