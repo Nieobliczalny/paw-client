@@ -110,7 +110,7 @@ function TrelloRestService(apiPrefix)
 	this.cards = new RestResource(apiPrefix, 'cards');
 	//this.boards.setChildResources({'lists':'tasks'}) //sample multistructure:, {'lists':'tasks', 'test':[{'test2':'test3'}, 'test4'], 'xd':['xd1', 'xd2']}
 	this.loggeduser = new RestResource(apiPrefix, 'loggeduser');
-	this.user = new RestResource(apiPrefix, 'user');
+	this.user = new RestResource(apiPrefix, 'users');
 	this.logins = new RestResource(apiPrefix, 'logins');
 	this.logout = new RestResource(apiPrefix, 'logouts', {disableGetById: true, disableGet: true, disablePut: true, disableDelete: true});
 }

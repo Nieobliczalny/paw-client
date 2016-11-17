@@ -110,14 +110,15 @@
             <h4 class="modal-title">Rejestracja</h4>
           </div>
           <div class="modal-body">
-            <p>Email: <input name="email" type="email"/></p>
-            <p>Nick: <input name="nick" type="text"/></p>
-            <p>Hasło: <input name="password" type="password"/></p>
-            <p>Potwierdź hasło: <input name="confirm" type="password"/></p>
+			<div class="alert-danger" data-bind="visible: RegisterMessage!='', text: RegisterMessage"></div>
+            <p>Email: <input name="email" type="email" data-bind="value: RegisterEmail" /></p>
+            <p>Nick: <input name="nick" type="text" data-bind="value: RegisterNick" /></p>
+            <p>Hasło: <input name="password" type="password" data-bind="value: RegisterPassword" /></p>
+            <p>Potwierdź hasło: <input name="confirm" type="password" data-bind="value: RegisterPasswordConfirm" /></p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
-            <button type="button" class="btn btn-default">Zarejestruj</button>
+            <button type="button" class="btn btn-default" data-bind="click: DoRegister">Zarejestruj</button>
           </div>
         </div>
 

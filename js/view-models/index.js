@@ -4,6 +4,11 @@ var IndexViewModel = function() {
 	this.LoginUser = ko.observable('');
 	this.LoginPassword = ko.observable('');
 	this.LoginMessage = ko.observable('');
+	this.RegisterEmail = ko.observable('');
+	this.RegisterNick = ko.observable('');
+	this.RegisterPassword = ko.observable('');
+	this.RegisterPasswordConfirm = ko.observable('');
+	this.RegisterMessage = ko.observable('');
 	this.loggedUserID = -1;
 	this.isLoggedUser = ko.pureComputed(function(){
 		return this.loggedUserName() != 'Gość';
@@ -36,6 +41,22 @@ var IndexViewModel = function() {
 			self.loggedUserName('Gość');
 			self.loggedUserID = -1;
 		});
+	};
+	this.DoRegister = function(){
+		if (this.RegisterPassword() != this.RegisterPasswordConfirm())
+		{
+			this.RegisterMessage('Podane hasła nie są takie same!');
+		}
+		else
+		{
+			TrelloApi.user.post({username: this.RegisterNick, email: this.RegisterEmail, login: this.RegisterNick, password: this.RegisterPassword}, function(data){
+				self.RegisterMessage('');
+				$('#registryModal').modal('hide');
+			}, function(error){
+				console.log('Nie udało się zalogować, spróbuj ponownie!');
+				self.RegisterMessage('Błąd rejestracji');
+			});
+		}
 	};
 	this.loggoutClick = function(){
 		TrelloApi.logout.post({}, function(data){
