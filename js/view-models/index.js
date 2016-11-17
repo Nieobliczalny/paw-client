@@ -38,9 +38,12 @@ var IndexViewModel = function() {
 		});
 	};
 	this.loggoutClick = function(){
-		//TODO wylogowywanie
-		self.loggedUserName('Gość');
-		self.loggedUserID= -1;
+		TrelloApi.logout.post({}, function(data){
+			self.loggedUserName('Gość');
+			self.loggedUserID= -1;
+		}, function(error){
+			console.log('Nie udało się wylogować, spróbuj ponownie!');
+		});
 	};
 
 
