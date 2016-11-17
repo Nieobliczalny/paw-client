@@ -84,13 +84,14 @@
             <h4 class="modal-title">Logowanie</h4>
           </div>
           <div class="modal-body">
-            <p>Email: <input name="email" type="email"/></p>
-            <p>Hasło: <input name="password" type="password"/></p>
+			<div class="alert-danger" data-bind="visible: LoginMessage!='', text: LoginMessage"></div>
+            <p>Login: <input name="login" type="text" data-bind="value: LoginUser" /></p>
+            <p>Hasło: <input name="password" type="password" data-bind="value: LoginPassword" /></p>
             
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
-            <button type="button" class="btn btn-default">Zaloguj</button>
+            <button type="button" class="btn btn-default" data-bind="click: DoLogin">Zaloguj</button>
           </div>
         </div>
 
@@ -109,7 +110,7 @@
             <h4 class="modal-title">Rejestracja</h4>
           </div>
           <div class="modal-body">
-            <p>Email: <input name="email" type="email""/></p>
+            <p>Email: <input name="email" type="email"/></p>
             <p>Nick: <input name="nick" type="text"/></p>
             <p>Hasło: <input name="password" type="password"/></p>
             <p>Potwierdź hasło: <input name="confirm" type="password"/></p>

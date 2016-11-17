@@ -1,6 +1,9 @@
 // Here's my data model
 var IndexViewModel = function() {
 	this.loggedUserName = ko.observable('Gość');
+	this.LoginUser = ko.observable('');
+	this.LoginPassword = ko.observable('');
+	this.LoginMessage = ko.observable('');
 	this.loggedUserID = -1;
 	this.isLoggedUser = ko.pureComputed(function(){
 		return this.loggedUserName() != 'Gość';
@@ -11,14 +14,6 @@ var IndexViewModel = function() {
 	}, this);
 
 	var self = this;
-	TrelloApi.logins.post({login: 'Adam', password: 'admin'}, function(data){
-		self.loggedUserName(data.username);
-		self.loggedUserID = data.id;
-	}, function(error){
-		console.log('Nie udało się zalogować, spróbuj ponownie!');
-		self.loggedUserName('Gość');
-		self.loggedUserID = -1;
-	});
 	//TrelloApi.boards.delete(1, function(result){console.log(result);}, function(error){console.error(error);}); 
 	//TrelloApi.boards.post({name: 'BoardName'}, function(result){console.log(result);}, function(error){console.error(error);});
 	//TrelloApi.boards.put(2, {name: 'Nowa nazwa'}, function(result){ console.log(result);}, function(error){console.error(error);});
@@ -29,6 +24,19 @@ var IndexViewModel = function() {
 	//TrelloApi.cards.put(1, {name: 'Nowa nazwa card'}, function(result){console.log(result);}, function(error){console.error(error);})
 	//TrelloApi.cards.delete(1, function(result){console.log(result);}, function(error){console.error(error);});
 
+	this.DoLogin = function(){
+		TrelloApi.logins.post({login: this.LoginUser, password: this.LoginPassword}, function(data){
+			self.loggedUserName(data.username);
+			self.loggedUserID = data.id;
+			self.LoginMessage('');
+			$('#loginModal').modal('hide');
+		}, function(error){
+			console.log('Nie udało się zalogować, spróbuj ponownie!');
+			self.LoginMessage('Błąd logowania');
+			self.loggedUserName('Gość');
+			self.loggedUserID = -1;
+		});
+	};
 	this.loggoutClick = function(){
 		//TODO wylogowywanie
 		self.loggedUserName('Gość');
