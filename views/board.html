@@ -2,8 +2,13 @@
 <a data-bind="click: addList">Dodaj listę</a>
 <table class="table">
 	<thead>
-		<tr data-bind="foreach: lists">
+		<tr>
+			<!-- ko foreach: lists -->
 			<th><span data-bind="text: name"></span> <a data-bind="click: $parent.addCardToList, visible: !$data.archived">[Dodaj kartę]</a> <a data-bind="click: $parent.renameList, visible: !$data.archived">[Zmień nazwę]</a> <a data-bind="click: $parent.archiveList, visible: !$data.archived">[Archiwizuj]</a> <a data-bind="click: $parent.unarchiveList, visible: $data.archived">[Przywróć]</a> <a data-bind="click: $parent.deleteList, visible: $data.archived">[Usuń]</a></th>
+			<!-- /ko -->
+			<th>
+				<form data-bind="submit: addListWithTitle"><input type="text"><input type="submit" value="Dodaj"></form>
+			</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -11,8 +16,13 @@
 			<td>
 				<table class="table">
 					<tbody data-bind="foreach: cards">
-						<tr>
+						<tr data-bind="dragZone: { name: 'tasks' }, dropZone: { accepts: 'tasks', drop: $parentContext.$parent.drop }">
 							<td><span data-bind="text: name"></span> <a data-bind="click: $parentContext.$parent.editCardName, visible: !$data.archived">[Zmień nazwę]</a> <a data-bind="click: $parentContext.$parent.editCardDescription, visible: !$data.archived">[Zmień opis]</a> <a data-toggle="modal" data-target="#selectListModal" data-bind="click: $parentContext.$parent.moveCard, visible: !$data.archived">[Przenieś]</a> <a data-bind="click: $parentContext.$parent.archiveCard, visible: !$data.archived">[Archiwizuj]</a> <a data-bind="click: $parentContext.$parent.unarchiveCard, visible: $data.archived">[Przywróć]</a> <a data-bind="click: $parentContext.$parent.deleteCard, visible: $data.archived">[Usuń]</a></td>
+						</tr>
+					</tbody>
+					<tbody>
+						<tr data-bind="dropZone: { accepts: 'tasks', drop: $parent.drop }">
+							<td><form data-bind="submit: $parent.addCardToListWithTitle"><input type="text"><input type="submit" value="Dodaj"></form></td>
 						</tr>
 					</tbody>
 				</table>
