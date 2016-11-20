@@ -1,35 +1,42 @@
 <h1 data-bind="text: board().name">...</h1>
-<a data-bind="click: addList">Dodaj listę</a>
-<table class="table">
-	<thead>
-		<tr>
-			<!-- ko foreach: lists -->
-			<th><span data-bind="text: name"></span> <a data-bind="click: $parent.addCardToList, visible: !$data.archived">[Dodaj kartę]</a> <a data-bind="click: $parent.renameList, visible: !$data.archived">[Zmień nazwę]</a> <a data-bind="click: $parent.archiveList, visible: !$data.archived">[Archiwizuj]</a> <a data-bind="click: $parent.unarchiveList, visible: $data.archived">[Przywróć]</a> <a data-bind="click: $parent.deleteList, visible: $data.archived">[Usuń]</a></th>
-			<!-- /ko -->
-			<th>
-				<form data-bind="submit: addListWithTitle"><input type="text"><input type="submit" value="Dodaj"></form>
-			</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr data-bind="foreach: lists">
-			<td>
-				<table class="table">
-					<tbody data-bind="foreach: cards">
-						<tr data-bind="dragZone: { name: 'tasks' }, dropZone: { accepts: 'tasks', drop: $parentContext.$parent.drop }">
-							<td><span data-bind="text: name"></span> <a data-bind="click: $parentContext.$parent.editCardName, visible: !$data.archived">[Zmień nazwę]</a> <a data-bind="click: $parentContext.$parent.editCardDescription, visible: !$data.archived">[Zmień opis]</a> <a data-toggle="modal" data-target="#selectListModal" data-bind="click: $parentContext.$parent.moveCard, visible: !$data.archived">[Przenieś]</a> <a data-bind="click: $parentContext.$parent.archiveCard, visible: !$data.archived">[Archiwizuj]</a> <a data-bind="click: $parentContext.$parent.unarchiveCard, visible: $data.archived">[Przywróć]</a> <a data-bind="click: $parentContext.$parent.deleteCard, visible: $data.archived">[Usuń]</a></td>
-						</tr>
-					</tbody>
-					<tbody>
-						<tr data-bind="dropZone: { accepts: 'tasks', drop: $parent.drop }">
-							<td><form data-bind="submit: $parent.addCardToListWithTitle"><input type="text"><input type="submit" value="Dodaj"></form></td>
-						</tr>
-					</tbody>
-				</table>
-			</td>
-		</tr>
-	</tbody>
-</table>
+<div data-bind="visible: !board().archived">
+	<a data-bind="click: addList">Dodaj listę</a>
+	<table class="table">
+		<thead>
+			<tr>
+				<!-- ko foreach: lists -->
+				<th><span data-bind="text: name"></span> <a data-bind="click: $parent.addCardToList, visible: !$data.archived">[Dodaj kartę]</a> <a data-bind="click: $parent.renameList, visible: !$data.archived">[Zmień nazwę]</a> <a data-bind="click: $parent.archiveList, visible: !$data.archived">[Archiwizuj]</a> <a data-bind="click: $parent.unarchiveList, visible: $data.archived">[Przywróć]</a> <a data-bind="click: $parent.deleteList, visible: $data.archived">[Usuń]</a></th>
+				<!-- /ko -->
+				<th>
+					<form data-bind="submit: addListWithTitle"><input type="text"><input type="submit" value="Dodaj"></form>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-bind="foreach: lists">
+				<td>
+					<table class="table">
+						<tbody data-bind="foreach: cards">
+							<tr data-bind="dragZone: { name: 'tasks' }, dropZone: { accepts: 'tasks', drop: $parentContext.$parent.drop }">
+								<td><span data-bind="text: name"></span> <a data-bind="click: $parentContext.$parent.editCardName, visible: !$data.archived">[Zmień nazwę]</a> <a data-bind="click: $parentContext.$parent.editCardDescription, visible: !$data.archived">[Zmień opis]</a> <a data-toggle="modal" data-target="#selectListModal" data-bind="click: $parentContext.$parent.moveCard, visible: !$data.archived">[Przenieś]</a> <a data-bind="click: $parentContext.$parent.archiveCard, visible: !$data.archived">[Archiwizuj]</a> <a data-bind="click: $parentContext.$parent.unarchiveCard, visible: $data.archived">[Przywróć]</a> <a data-bind="click: $parentContext.$parent.deleteCard, visible: $data.archived">[Usuń]</a></td>
+							</tr>
+						</tbody>
+						<tbody>
+							<tr data-bind="dropZone: { accepts: 'tasks', drop: $parent.drop }">
+								<td><form data-bind="submit: $parent.addCardToListWithTitle"><input type="text"><input type="submit" value="Dodaj"></form></td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div data-bind="visible: board().archived">
+	Ta tablica jest zamknięta.<br>
+	<a data-bind="click: openBoard">Otwórz tablicę</a><br>
+	<a data-bind="click: removeBoard">Trwale usuń tablicę</a>
+</div>
  <!-- Modal select list -->
     <div id="selectListModal" class="modal fade" role="dialog">
       <div class="modal-dialog">
@@ -51,7 +58,7 @@
 					</div>
 					<div data-bind="attr: { id: 'collapse' + id }" class="panel-collapse collapse">
 						<ul class="list-group">
-							<li class="list-group-item" data-bind="foreach: lists"><div data-bind="text: name, click: $parentContext.$parent.chooseList, css: {'alert-success':id==$parentContext.$parent.isListSelected()}, visible: id!=$parentContext.$parent.isElementVisible()"></div></li>
+							<li class="list-group-item" data-bind="foreach: lists"><div data-bind="text: name, click: $parentContext.$parent.chooseList, css: {'label-success':id==$parentContext.$parent.isListSelected()}, visible: id!=$parentContext.$parent.isElementVisible()"></div></li>
 						</ul>
 					</div>
 				</div>

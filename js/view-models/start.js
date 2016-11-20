@@ -3,6 +3,7 @@ var StartViewModel = function() {
 	this.boards = [];
 	this.boardsFiltered = ko.observableArray([]);
 	this.filter = ko.observable('');
+	this.showHiddenBoards = ko.observable(false);
 	var self = this;
 	this.update = function(){
 		TrelloApi.boards.get(function(data){
@@ -47,6 +48,16 @@ var StartViewModel = function() {
 			console.error(error);
 		});
 	};
+	this.closeTable = function(obj){
+		TrelloApi.boards.put(obj.id, {archived: 1}, function(result){
+			var board = self.boards.filter(function(e, i, a){ return e.id == result.id; });
+			if (board.length > 0) self.boards.splice(self.boards.indexOf(board[0]), 1, result);
+			else self.boards.push(result);
+			self.boardsFiltered(self.applyFilter(self.boards, self.filter()));
+		}, function(error){
+			console.error(error);
+		});
+	};
 	this.filter.subscribe(function(newValue) {
 		self.boardsFiltered(self.applyFilter(self.boards, self.filter()));
 	});
@@ -55,6 +66,9 @@ var StartViewModel = function() {
 		return array.filter(function(e, i, a){
 			return e.name.toLocaleLowerCase().includes(value.toLocaleLowerCase());
 		});
+	};
+	this.test = function(){
+		console.info(arguments);
 	};
 };
 

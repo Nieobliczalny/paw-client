@@ -286,6 +286,21 @@ var BoardViewModel = function(){
 		});
 		console.info(arguments);
 	};
+	
+	this.removeBoard = function(){
+		TrelloApi.boards.delete(self.boardId, function(result){
+			window.location.hash = '#';
+		}, function(error){
+			console.error(error);
+		});
+	};
+	this.openBoard = function(){
+		TrelloApi.boards.put(self.boardId, {archived: 0}, function(result){
+			self.board(result);
+		}, function(error){
+			console.error(error);
+		});
+	};
 };
 
 var BoardViewModelObj = new BoardViewModel();
