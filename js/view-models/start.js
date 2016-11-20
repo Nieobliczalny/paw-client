@@ -4,6 +4,7 @@ var StartViewModel = function() {
 	this.boardsFiltered = ko.observableArray([]);
 	this.filter = ko.observable('');
 	this.showHiddenBoards = ko.observable(false);
+	this.editingBoardID = -1;
 	var self = this;
 	this.update = function(){
 		TrelloApi.boards.get(function(data){
@@ -14,26 +15,37 @@ var StartViewModel = function() {
 		});
 	};
 	this.addTable = function(){
-		var name = prompt('Podaj nazwę tablicy: ');
+		$('#new-board-name').val('');
+		$('#addBoardModal').modal('show');
+	};
+	this.addBoard = function(){
+		var name = $('#new-board-name').val();
 		if (name)
 		{
 			TrelloApi.boards.post({name: name}, function(result){
 				self.boards.push(result);
 				self.boardsFiltered(self.applyFilter(self.boards, self.filter()));
+				$('#addBoardModal').modal('hide');
 			}, function(error){
 				console.error(error);
 			});
 		}
 	};
 	this.renameTable = function(obj){
-		var name = prompt('Podaj nową nazwę tablicy: ');
+		self.editingBoardID = obj.id;
+		$('#ex-board-name').val(obj.name);
+		$('#editBoardModal').modal('show');
+	};
+	this.editBoard = function(){
+		var name = $('#ex-board-name').val();
 		if (name)
 		{
-			TrelloApi.boards.put(obj.id, {name: name}, function(result){
+			TrelloApi.boards.put(self.editingBoardID, {name: name}, function(result){
 				var board = self.boards.filter(function(e, i, a){ return e.id == result.id; });
 				if (board.length > 0) self.boards.splice(self.boards.indexOf(board[0]), 1, result);
 				else self.boards.push(result);
 				self.boardsFiltered(self.applyFilter(self.boards, self.filter()));
+				$('#editBoardModal').modal('hide');
 			}, function(error){
 				console.error(error);
 			});
