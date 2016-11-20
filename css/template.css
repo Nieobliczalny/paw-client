@@ -23,3 +23,21 @@ body {
 .loggout {
   float: right;
 }
+
+.inline {
+  display: inline;
+  text-align: center;
+  margin: 5%;
+}
+
+.boardTd {
+    background-color: #3232cd;
+    margin: 3px;
+    border-radius: 5px;
+    width: 30%;
+    display: inline-table;
+}
+
+a{
+  color: white;
+}

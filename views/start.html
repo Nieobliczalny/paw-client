@@ -1,23 +1,33 @@
-﻿<h1>Dostępne tablice</h1>
-<a data-bind="click: addTable">Dodaj tablicę</a><br>
-Filtruj: <input type="text" data-bind="textInput: filter"><br>
-Pokaż ukryte: 
-<div class="btn-group" data-toggle="buttons">
-  <label class="btn btn-primary">
-    <input type="radio" name="options" value="1" data-bind="bsChecked: showHiddenBoards, checkedValue: true" autocomplete="off"> TAK
-  </label>
-  <label class="btn btn-primary active">
-    <input type="radio" name="options" value="0" data-bind="bsChecked: showHiddenBoards, checkedValue: false" autocomplete="off"> NIE
-  </label>
-</div>
-<table class="table">
-	<tbody data-bind="foreach: boardsFiltered">
-		<tr data-bind="visible: $parent.showHiddenBoards()=='true' || archived!=true">
-			<td><a data-bind="text: name, page-href: {path: '../board', params: {boardId: id}}"></a> <a data-bind="click: $parent.renameTable, visible: !archived">[Zmień nazwę]</a> <a data-bind="click: $parent.closeTable, visible: !archived">[Zamknij tablicę]</a> <a data-bind="click: $parent.deleteTable, visible: archived">[Usuń]</a></td>
-		</tr>
-	</tbody>
-</table>
+﻿<h1>Dostępne tablice:</h1>
 
+<div class="inline"> Filtruj: <input type="text" data-bind="textInput: filter"></div>
+<div class="inline"> 
+  Pokaż ukryte: 
+  <div class="btn-group" data-toggle="buttons">
+    <label class="btn btn-primary">
+      <input type="radio" name="options" value="1" data-bind="bsChecked: showHiddenBoards, checkedValue: true" autocomplete="off"> TAK
+    </label>
+    <label class="btn btn-primary active">
+      <input type="radio" name="options" value="0" data-bind="bsChecked: showHiddenBoards, checkedValue: false" autocomplete="off"> NIE
+    </label>
+  </div>
+</div>
+
+<div  >
+	<div data-bind="foreach: boardsFiltered">
+		<div class="boardTd" data-bind="visible: $parent.showHiddenBoards()=='true' || archived!=true">
+        <a data-bind="text: name, page-href: {path: '../board', params: {boardId: id}}"></a> <br/>
+        <a class="btn btn-primary btn-xs" data-bind="click: $parent.renameTable, visible: !archived">Zmień nazwę</a> 
+        <a class="btn btn-primary btn-xs" data-bind="click: $parent.closeTable, visible: !archived">[Zamknij tablicę]</a> 
+        <a class="btn btn-primary btn-xs" data-bind="click: $parent.deleteTable, visible: archived">[Usuń]</a><br/><br/>
+		</div>
+	</div>
+  	<div class="boardTd">
+       <br/><button class="btn btn-primary active " style=" vertical-align: middle; "data-bind="click: addTable">Dodaj tablicę</button><br/></br>
+		</div>
+</div>
+
+<!-- Dodawanie tablicy -->
 <div class="modal fade" id="addBoardModal" tabindex="-1" role="dialog" aria-labelledby="addBoardModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
