@@ -9,6 +9,7 @@ var BoardViewModel = function(){
 	this.newCardListID = -1;
 	this.editingListID = -1;
 	this.editingCard = {};
+	this.displayedCard = ko.observable({});
 	
 	
 	var self = this;
@@ -317,6 +318,13 @@ var BoardViewModel = function(){
 		}, function(error){
 			console.error(error);
 		});
+	};
+	this.showCard = function(obj){
+		self.displayedCard(obj);
+		$('#showCardModal').modal('show');
+	};
+	this.addComment = function(){
+		console.info(arguments);
 	};
 };
 
