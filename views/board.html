@@ -18,7 +18,7 @@
 					<table class="table">
 						<tbody data-bind="foreach: cards">
 							<tr data-bind="dragZone: { name: 'tasks' }, dropZone: { accepts: 'tasks', drop: $parentContext.$parent.drop }">
-								<td><span data-bind="text: name"></span> <a data-bind="click: $parentContext.$parent.editCard, visible: !$data.archived">[Edytuj nazwę / opis]</a> <a data-toggle="modal" data-target="#selectListModal" data-bind="click: $parentContext.$parent.moveCard, visible: !$data.archived">[Przenieś]</a> <a data-bind="click: $parentContext.$parent.archiveCard, visible: !$data.archived">[Archiwizuj]</a> <a data-bind="click: $parentContext.$parent.unarchiveCard, visible: $data.archived">[Przywróć]</a> <a data-bind="click: $parentContext.$parent.deleteCard, visible: $data.archived">[Usuń]</a></td>
+								<td><span data-bind="text: name, click: $parentContext.$parent.showCard"></span> <a data-bind="click: $parentContext.$parent.editCard, visible: !$data.archived">[Edytuj nazwę / opis]</a> <a data-toggle="modal" data-target="#selectListModal" data-bind="click: $parentContext.$parent.moveCard, visible: !$data.archived">[Przenieś]</a> <a data-bind="click: $parentContext.$parent.archiveCard, visible: !$data.archived">[Archiwizuj]</a> <a data-bind="click: $parentContext.$parent.unarchiveCard, visible: $data.archived">[Przywróć]</a> <a data-bind="click: $parentContext.$parent.deleteCard, visible: $data.archived">[Usuń]</a></td>
 							</tr>
 						</tbody>
 						<tbody>
@@ -181,3 +181,31 @@
   </div>
 </div>
 <!-- End of Modal - edit Card -->
+
+<!-- Modal - display Card -->
+<div class="modal fade" id="showCardModal" tabindex="-1" role="dialog" aria-labelledby="showCardModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="showCardModalLabel" data-bind="text: displayedCard().name"></h4>
+      </div>
+      <div class="modal-body">
+		<p data-bind="text: displayedCard().description"></p>
+        <form>
+          <div class="form-group">
+            <label for="new-card-comment" class="control-label">Dodaj komentarz:</label>
+            <textarea class="form-control" id="new-card-comment"></textarea>
+          </div>
+		  <div class="form-group">
+			<button type="button" class="btn btn-primary" data-bind="click: addComment">Wyślij</button>
+		  </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+		<h3>Aktywność</h3>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End of Modal - display Card -->
