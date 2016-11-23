@@ -1,4 +1,5 @@
 <h1 data-bind="text: board().name">...</h1>
+Polubień: <span data-bind="text: likesCount, click: toggleLike"></span><br>
 <div data-bind="visible: !board().archived">
 	<a data-bind="click: addList">Dodaj listę</a>
 	<table class="table">

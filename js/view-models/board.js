@@ -12,6 +12,7 @@ var BoardViewModel = function(){
 	this.displayedCard = ko.observable({});
 	this.displayedCardComments = ko.observableArray([]);
 	this.editedComment = ko.observable({});
+	this.likes = ko.observableArray([]);
 	
 	
 	var self = this;
@@ -43,6 +44,12 @@ var BoardViewModel = function(){
 					})();
 				}
 				self.lists(lists);
+			}, function(error){
+				console.error(error);
+			});
+			
+			TrelloApi.boards.at(self.boardId).likes.get(function(data){
+				self.likes(data);
 			}, function(error){
 				console.error(error);
 			});
@@ -360,6 +367,29 @@ var BoardViewModel = function(){
 			console.error(error);
 		});
 	};
+	this.toggleLike = function(){
+		var currentLike = self.likes().filter(function(e, i, a){return e.user.id == viewModel.loggedUserID});
+		if (currentLike.length > 0)
+		{
+			TrelloApi.likes.delete(currentLike[0].id, function(result){
+				self.likes.splice(self.likes().indexOf(currentLike[0]), 1);
+			}, function(error){
+				console.error(error);
+			});
+		}
+		else
+		{
+			TrelloApi.likes.post({boardId: self.boardId}, function(result){
+				self.likes.push(result);
+			}, function(error){
+				console.info(error);
+			});
+		}
+	};
+	
+	this.likesCount = ko.computed(function() {
+        return self.likes().length;
+    }, this);
 };
 
 var BoardViewModelObj = new BoardViewModel();
