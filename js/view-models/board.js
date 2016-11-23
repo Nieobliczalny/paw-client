@@ -13,6 +13,8 @@ var BoardViewModel = function(){
 	this.displayedCardComments = ko.observableArray([]);
 	this.editedComment = ko.observable({});
 	this.likes = ko.observableArray([]);
+	this.tags = ko.observableArray([]);
+	this.boardTags = ko.observableArray([]);
 	
 	
 	var self = this;
@@ -48,8 +50,8 @@ var BoardViewModel = function(){
 				console.error(error);
 			});
 			
-			TrelloApi.boards.at(self.boardId).likes.get(function(data){
-				self.likes(data);
+			TrelloApi.boards.at(self.boardId).tags.get(function(data){
+				self.boardTags(data);
 			}, function(error){
 				console.error(error);
 			});
@@ -135,6 +137,7 @@ var BoardViewModel = function(){
 				result.cards = ko.observableArray(result.cards);
 				if (list.length > 0) self.lists.splice(self.lists.indexOf(list[0]), 1, result);
 				else self.lists.push(result);
+				$('#editListModal').modal('hide');
 			}, function(error){
 				console.error(error);
 			});
@@ -335,6 +338,11 @@ var BoardViewModel = function(){
 		}, function(error){
 			console.error(error);
 		});
+		TrelloApi.cards.at(obj.id).tags.get(function(result){
+			self.tags(result);
+		}, function(error){
+			console.error(error);
+		});
 		$('#showCardModal').modal('show');
 	};
 	this.addComment = function(){
@@ -390,6 +398,35 @@ var BoardViewModel = function(){
 	this.likesCount = ko.computed(function() {
         return self.likes().length;
     }, this);
+	
+	this.addBoardTag = function(){
+		$('#new-board-tag-name').val('');
+		$('#new-board-tag-color').val('');
+		$('#addBoardTagModal').modal('show');
+	};
+	
+	this.removeBoardTag = function(obj){
+		TrelloApi.tags.delete(obj.id, function(result){
+			var comm = self.boardTags().filter(function(e, i, a){ return e.id == obj.id; });
+			if (comm.length > 0) self.boardTags.splice(self.boardTags().indexOf(comm[0]), 1);
+		}, function(error){
+			console.error(error);
+		});
+	};
+	
+	this.addBoardTagConfirm = function(){
+		var name = $('#new-board-tag-name').val();
+		var color = $('#new-board-tag-color').val();
+		if (name && color)
+		{
+			TrelloApi.tags.post({content: name, colour: color, boardId: self.boardId}, function(result){
+				self.boardTags.push(result);
+				$('#addBoardTagModal').modal('hide');
+			}, function(error){
+				console.error(error);
+			});
+		}
+	};
 };
 
 var BoardViewModelObj = new BoardViewModel();

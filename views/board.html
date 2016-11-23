@@ -1,5 +1,11 @@
 <h1 data-bind="text: board().name">...</h1>
 Polubień: <span data-bind="text: likesCount, click: toggleLike"></span><br>
+Tagi:
+<!-- ko foreach:boardTags -->
+<span class="label-success" data-bind="text: ' ' + content + ' (Usuń) ', style: {backgroundColor: colour}, click: $parent.removeBoardTag"></span>
+<!-- /ko -->
+<a data-bind="click: addBoardTag">Dodaj</a>
+<br>
 <div data-bind="visible: !board().archived">
 	<a data-bind="click: addList">Dodaj listę</a>
 	<table class="table">
@@ -192,6 +198,9 @@ Polubień: <span data-bind="text: likesCount, click: toggleLike"></span><br>
         <h4 class="modal-title" id="showCardModalLabel" data-bind="text: displayedCard().name"></h4>
       </div>
       <div class="modal-body">
+		<!-- ko foreach:tags -->
+		<span class="label-success">X</span>
+		<!-- /ko -->
 		<p data-bind="text: displayedCard().description"></p>
         <form>
           <div class="form-group">
@@ -233,7 +242,37 @@ Polubień: <span data-bind="text: likesCount, click: toggleLike"></span><br>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
         <button type="button" class="btn btn-primary" data-bind="click: editCommentConfirm">Edytuj kartę</button>
+	  </div>
     </div>
   </div>
 </div>
 <!-- End of Modal - edit Comment -->
+
+<!-- Modal - add Board Tag -->
+<div class="modal fade" id="addBoardTagModal" tabindex="-1" role="dialog" aria-labelledby="addBoardTagModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="addBoardTagModalLabel">Nowy tag</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="new-board-tag-name" class="control-label">Nazwa:</label>
+            <input type="text" class="form-control" id="new-board-tag-name">
+          </div>
+          <div class="form-group">
+            <label for="new-board-tag-color" class="control-label">Kolor:</label>
+            <input type="color" class="form-control" id="new-board-tag-color">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+        <button type="button" class="btn btn-primary" data-bind="click: addBoardTagConfirm">Dodaj tag</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End of Modal - add Board Tag -->

@@ -106,12 +106,15 @@ function TrelloRestService(apiPrefix)
 	this.boards = new RestResource(apiPrefix, 'boards');
 	this.boards.addChildResource('lists');
 	this.boards.addChildResource('likes');
+	this.boards.addChildResource('tags');
 	this.lists = new RestResource(apiPrefix, 'lists');
 	this.lists.addChildResource('cards');
 	this.cards = new RestResource(apiPrefix, 'cards');
 	this.cards.addChildResource('comments');
+	this.cards.addChildResource('tags');
 	this.comments = new RestResource(apiPrefix, 'comments');
 	this.likes = new RestResource(apiPrefix, 'likes');
+	this.tags = new RestResource(apiPrefix, 'tags');
 	//this.boards.setChildResources({'lists':'tasks'}) //sample multistructure:, {'lists':'tasks', 'test':[{'test2':'test3'}, 'test4'], 'xd':['xd1', 'xd2']}
 	this.loggeduser = new RestResource(apiPrefix, 'loggeduser');
 	this.user = new RestResource(apiPrefix, 'users');
