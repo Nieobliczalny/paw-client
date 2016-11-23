@@ -10,6 +10,8 @@ var BoardViewModel = function(){
 	this.editingListID = -1;
 	this.editingCard = {};
 	this.displayedCard = ko.observable({});
+	this.displayedCardComments = ko.observableArray([]);
+	this.editedComment = ko.observable({});
 	
 	
 	var self = this;
@@ -321,10 +323,42 @@ var BoardViewModel = function(){
 	};
 	this.showCard = function(obj){
 		self.displayedCard(obj);
+		TrelloApi.cards.at(obj.id).comments.get(function(result){
+			self.displayedCardComments(result);
+		}, function(error){
+			console.error(error);
+		});
 		$('#showCardModal').modal('show');
 	};
 	this.addComment = function(){
-		console.info(arguments);
+		TrelloApi.cards.at(self.displayedCard().id).comments.post({content: $('#new-card-comment').val()}, function(result){
+			self.displayedCardComments.push(result);
+		}, function(error){
+			console.error(error);
+		});
+	};
+	this.removeComment = function(obj){
+		TrelloApi.comments.delete(obj.id, function(result){
+			var comm = self.displayedCardComments().filter(function(e, i, a){ return e.id == obj.id; });
+			if (comm.length > 0) self.displayedCardComments.splice(self.displayedCardComments().indexOf(comm[0]), 1);
+		}, function(error){
+			console.error(error);
+		});
+	};
+	this.editComment = function(obj){
+		self.editedComment(obj);
+		$('#edit-card-comment').val(obj.content);
+		$('#editCommentModal').modal('show');
+	};
+	this.editCommentConfirm = function(){
+		TrelloApi.comments.put(self.editedComment().id, {content: $('#edit-card-comment').val()}, function(result){
+			var comm = self.displayedCardComments().filter(function(e, i, a){ return e.id == self.editedComment().id; });
+			if (comm.length > 0) self.displayedCardComments.splice(self.displayedCardComments().indexOf(comm[0]), 1, result);
+			else self.displayedCardComments.push(result);
+			$('#editCommentModal').modal('hide');
+		}, function(error){
+			console.error(error);
+		});
 	};
 };
 
