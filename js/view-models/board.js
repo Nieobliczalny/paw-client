@@ -78,7 +78,7 @@ var BoardViewModel = function(){
 					TrelloApi.boards.at(result[i].id).lists.get(function(data){
 						for (var i = 0; i < data.length; i++)
 						{
-							board.lists.push({id: data[i].id, name: data[i].name});
+							board.lists.push({id: data[i].id, name: data[i].name, cards: data[i].cards});
 						}
 					}, function(error){
 						console.error(error);
@@ -309,22 +309,36 @@ var BoardViewModel = function(){
 		var currentList = self.lists().filter(function(e, i, a){ return e.id == movedObj.card_list.id; })[0];
 		var destListId = destination.card_list ? destination.card_list.id : destination.id;
 		var destList = self.lists().filter(function(e, i, a){ return e.id == destListId; })[0];
-		var newPosition = destination.card_list ? destination.position : destList.cards().length + 1;
+		if (!destList)
+		{
+			for (var i = 0; i < self.boardsData().length; i++)
+			{
+				for (var j = 0; j < self.boardsData()[i].lists().length; j++)
+				{
+					if (self.boardsData()[i].lists()[j].id == destListId) destList = self.boardsData()[i].lists()[j];
+				}
+			}
+		}
+		var newPosition = destination.card_list ? destination.position : destList.cards.length + 1;
 		var postObj = {position: newPosition};
 		if (currentList != destList) postObj.cardList_id = destList.id;
+		console.info(destination, destListId, destList, self.lists(), postObj)
 		TrelloApi.cards.put(movedObj.id, postObj, function(result){
 			for (var i = 0; i < currentList.cards().length; i++)
 			{
 				if (currentList.cards()[i].position > movedObj.position) currentList.cards()[i].position--;
 			}
 			currentList.cards.splice(currentList.cards.indexOf(movedObj), 1);
-			movedObj.card_list = destList;
-			for (var i = 0; i < destList.cards().length; i++)
+			if (typeof (destList.cards) == 'function')
 			{
-				if (destList.cards()[i].position >= newPosition) destList.cards()[i].position++;
+				movedObj.card_list = destList;
+				for (var i = 0; i < destList.cards().length; i++)
+				{
+					if (destList.cards()[i].position >= newPosition) destList.cards()[i].position++;
+				}
+				destList.cards.splice(newPosition - 1, 0, movedObj);
+				movedObj.position = newPosition;
 			}
-			destList.cards.splice(newPosition - 1, 0, movedObj);
-			movedObj.position = newPosition;
 		}, function(error){
 			console.error(error);
 			self.SelectListMessage('Błąd aktualizacji danych, spróbuj ponownie!');
