@@ -455,6 +455,16 @@ var BoardViewModel = function(){
 		TrelloApi.tags.delete(obj.id, function(result){
 			var comm = self.boardTags().filter(function(e, i, a){ return e.id == obj.id; });
 			if (comm.length > 0) self.boardTags.splice(self.boardTags().indexOf(comm[0]), 1);
+			var list = self.lists();
+			for (var i = 0; i < list.length; i++)
+			{
+				var card = list[i].cards();
+				for (var j = 0; j < card.length; j++)
+				{
+					var comm = card[j].tags().filter(function(e, i, a){ return e.id == obj.id; });
+					if (comm.length > 0) card[j].tags.splice(card[j].tags().indexOf(comm[j]), 1);
+				}
+			}
 		}, function(error){
 			console.error(error);
 		});
