@@ -13,13 +13,13 @@
   </div>
 </div>
 
-<div  >
+<div >
 	<div data-bind="foreach: boardsFiltered">
 		<div class="boardTd" data-bind="visible: $parent.showHiddenBoards()=='true' || archived!=true">
-        <a data-bind="text: name, page-href: {path: '../board', params: {boardId: id}}"></a> <br/>
-        <a class="btn btn-primary btn-xs" data-bind="click: $parent.renameTable, visible: !archived">Zmień nazwę</a> 
-        <a class="btn btn-primary btn-xs" data-bind="click: $parent.closeTable, visible: !archived">Zamknij tablicę</a> 
-        <a class="btn btn-primary btn-xs" data-bind="click: $parent.deleteTable, visible: archived">Usuń]</a><br/><br/>
+        <a class="linkStyle" data-bind="text: name, page-href: {path: '../board', params: {boardId: id}}"></a> <br/>
+        <a class="btn btn-primary btn-xs linkStyle" data-bind="click: $parent.renameTable, visible: !archived">Zmień nazwę</a> 
+        <a class="btn btn-primary btn-xs linkStyle" data-bind="click: $parent.closeTable, visible: !archived">Zamknij tablicę</a> 
+        <a class="btn btn-primary btn-xs linkStyle" data-bind="click: $parent.deleteTable, visible: archived">Usuń]</a><br/><br/>
 		</div>
 	</div>
   	<div class="boardTd">

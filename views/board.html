@@ -1,84 +1,128 @@
 <h1 data-bind="text: board().name">...</h1>
-Polubień: <span data-bind="text: likesCount, click: toggleLike"></span><br>
-Tagi:
+Polubień: <span data-bind="text: likesCount, click: toggleLike"></span><br> Tagi:
 <!-- ko foreach:boardTags -->
 <span class="label-success" data-bind="text: ' ' + content + ' (Usuń) ', style: {backgroundColor: colour}, click: $parent.removeBoardTag"></span>
 <!-- /ko -->
 <a data-bind="click: addBoardTag">Dodaj</a>
 <br>
 <div data-bind="visible: !board().archived">
-	<a data-bind="click: addList">Dodaj listę</a>
-	<table class="table">
-		<thead>
-			<tr>
-				<!-- ko foreach: lists -->
-				<th><span data-bind="text: name"></span> <a data-bind="click: $parent.addCardToList, visible: !$data.archived">[Dodaj kartę]</a> <a data-bind="click: $parent.renameList, visible: !$data.archived">[Zmień nazwę]</a> <a data-bind="click: $parent.archiveList, visible: !$data.archived">[Archiwizuj]</a> <a data-bind="click: $parent.unarchiveList, visible: $data.archived">[Przywróć]</a> <a data-bind="click: $parent.deleteList, visible: $data.archived">[Usuń]</a></th>
-				<!-- /ko -->
-				<th>
-					<form data-bind="submit: addListWithTitle"><input type="text"><input type="submit" value="Dodaj"></form>
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr data-bind="foreach: lists">
-				<td>
-					<table class="table">
-						<tbody data-bind="foreach: cards">
-							<tr data-bind="dragZone: { name: 'tasks' }, dropZone: { accepts: 'tasks', drop: $parentContext.$parent.drop }">
-								<td><span data-bind="foreach: $data.tags"><span class="label-success" data-bind="text: content, style: {backgroundColor: colour}"></span></span><span data-bind="text: name, click: $parentContext.$parent.showCard"></span> <a data-bind="click: $parentContext.$parent.editCard, visible: !$data.archived">[Edytuj nazwę / opis]</a> <a data-toggle="modal" data-target="#selectListModal" data-bind="click: $parentContext.$parent.moveCard, visible: !$data.archived">[Przenieś]</a> <a data-bind="click: $parentContext.$parent.archiveCard, visible: !$data.archived">[Archiwizuj]</a> <a data-bind="click: $parentContext.$parent.unarchiveCard, visible: $data.archived">[Przywróć]</a> <a data-bind="click: $parentContext.$parent.deleteCard, visible: $data.archived">[Usuń]</a></td>
-							</tr>
-						</tbody>
-						<tbody>
-							<tr data-bind="dropZone: { accepts: 'tasks', drop: $parent.drop }">
-								<td><form data-bind="submit: $parent.addCardToListWithTitle"><input type="text"><input type="submit" value="Dodaj"></form></td>
-							</tr>
-						</tbody>
-					</table>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+  <a data-bind="click: addList">Dodaj listę</a>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <!-- ko foreach: lists -->
+        <th>
+          <div class="card">
+            <span class="linkStyle" data-bind="text: name" style="display: block"></span>
+            <a class="btn btn-primary btn-xs linkStyle inline" data-bind="click: $parent.addCardToList, visible: !$data.archived">Dodaj kartę</a>
+            <a class="btn btn-primary btn-xs linkStyle inline" data-bind="click: $parent.renameList, visible: !$data.archived">Zmień nazwę</a>
+            <a class="btn btn-primary btn-xs linkStyle inline" data-bind="click: $parent.archiveList, visible: !$data.archived">Archiwizuj</a>
+            <a class="btn btn-primary btn-xs linkStyle inline" data-bind="click: $parent.unarchiveList, visible: $data.archived">Przywróć</a>
+            <a class="btn btn-primary btn-xs linkStyle inline" data-bind="click: $parent.deleteList, visible: $data.archived">Usuń</a>
+          </div>
+        </th>
+        <!-- /ko -->
+        <th style="background-color: #c0c0c0;">
+          <div class="card">
+            <br/>
+            <form data-bind="submit: addListWithTitle">
+              <input type="text" class="center-block">
+              <input type="submit" value="Dodaj listę" class="btn btn-primary btn-xs linkStyle center-block">
+            </form>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-bind="foreach: lists">
+        <td>
+          <table class="table">
+            <tbody data-bind="foreach: cards">
+              <tr data-bind="dragZone: { name: 'tasks' }, dropZone: { accepts: 'tasks', drop: $parentContext.$parent.drop }">
+                <td style="background-color: #c0c0c0;">
+                  <div class="card">
+                    <span data-bind="foreach: $data.tags">
+                        <span class="label-success" data-bind="text: content, style: {backgroundColor: colour}"></span>
+                    </span>
+                    <span class="linkStyle" style="display: block;" data-bind="text: name, click: $parentContext.$parent.showCard"></span>
+                    <a class="btn btn-primary btn-xs linkStyle inline" data-bind="click: $parentContext.$parent.editCard, visible: !$data.archived">Edytuj nazwę / opis</a>
+                    <a class="btn btn-primary btn-xs linkStyle inline" data-toggle="modal" data-target="#selectListModal" data-bind="click: $parentContext.$parent.moveCard, visible: !$data.archived">Przenieś</a>
+                    <a class="btn btn-primary btn-xs linkStyle inline" data-bind="click: $parentContext.$parent.archiveCard, visible: !$data.archived">Archiwizuj</a>
+                    <a class="btn btn-primary btn-xs linkStyle inline" data-bind="click: $parentContext.$parent.unarchiveCard, visible: $data.archived">Przywróć</a>
+                    <a class="btn btn-primary btn-xs linkStyle inline" data-bind="click: $parentContext.$parent.deleteCard, visible: $data.archived">Usuń</a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr data-bind="dropZone: { accepts: 'tasks', drop: $parent.drop }">
+                <td style="background-color: #c0c0c0;">
+                  <div class="card">
+                    <br/>
+                    <form data-bind="submit: $parent.addCardToListWithTitle">
+                      <input type="text" sytle="display: block;"><br/>
+                      <input type="submit" value="Dodaj kartę" class="btn btn-primary btn-xs linkStyle">
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 <div data-bind="visible: board().archived">
-	Ta tablica jest zamknięta.<br>
-	<a data-bind="click: openBoard">Otwórz tablicę</a><br>
-	<a data-bind="click: removeBoard">Trwale usuń tablicę</a>
+  Ta tablica jest zamknięta.<br>
+  <a data-bind="click: openBoard">Otwórz tablicę</a><br>
+  <a data-bind="click: removeBoard">Trwale usuń tablicę</a>
 </div>
- <!-- Modal select list -->
-    <div id="selectListModal" class="modal fade" role="dialog">
-      <div class="modal-dialog">
 
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Zmiana listy</h4>
-          </div>
-          <div class="modal-body">
-			<div class="alert-danger" data-bind="visible: SelectListMessage()!='', text: SelectListMessage()"></div>
-			<div class="panel-group" data-bind="foreach: boardsData">
-				<div class="panel panel-default">
-					<div class="panel-heading" data-bind="style: {backgroundColor: $parent.board().id==id ? '#d9edf7' : ''}">
-						<h4 class="panel-title">
-							<a data-toggle="collapse" data-bind="text: name, attr: { href: '#collapse' + id }"></a>
-						</h4>
-					</div>
-					<div data-bind="attr: { id: 'collapse' + id }" class="panel-collapse collapse">
-						<ul class="list-group">
-							<li class="list-group-item" data-bind="foreach: lists"><div data-bind="text: name, click: $parentContext.$parent.chooseList, css: {'label-success':id==$parentContext.$parent.isListSelected()}, visible: id!=$parentContext.$parent.isElementVisible()"></div></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
-            <button type="button" class="btn btn-default" data-bind="click: changeList">Zmień</button>
+
+
+
+
+
+
+<!-- Modal select list -->
+<div id="selectListModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Zmiana listy</h4>
+      </div>
+      <div class="modal-body">
+        <div class="alert-danger" data-bind="visible: SelectListMessage()!='', text: SelectListMessage()"></div>
+        <div class="panel-group" data-bind="foreach: boardsData">
+          <div class="panel panel-default">
+            <div class="panel-heading" data-bind="style: {backgroundColor: $parent.board().id==id ? '#d9edf7' : ''}">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-bind="text: name, attr: { href: '#collapse' + id }"></a>
+              </h4>
+            </div>
+            <div data-bind="attr: { id: 'collapse' + id }" class="panel-collapse collapse">
+              <ul class="list-group">
+                <li class="list-group-item" data-bind="foreach: lists">
+                  <div data-bind="text: name, click: $parentContext.$parent.chooseList, css: {'label-success':id==$parentContext.$parent.isListSelected()}, visible: id!=$parentContext.$parent.isElementVisible()"></div>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+        <button type="button" class="btn btn-default" data-bind="click: changeList">Zmień</button>
       </div>
     </div>
+
+  </div>
+</div>
 <!-- koniec modala -->
 
 <!-- Modal - add List -->
@@ -198,27 +242,29 @@ Tagi:
         <h4 class="modal-title" id="showCardModalLabel" data-bind="text: displayedCard().name"></h4>
       </div>
       <div class="modal-body">
-	    Etykiety: 
-		<!-- ko foreach:tags -->
-		<span class="label-success" data-bind="text: content, style: {backgroundColor: colour}"></span>
-		<!-- /ko -->
-		<button type="button" class="btn btn-primary" data-bind="click: alterCardTag">Zmień</button>
-		<p data-bind="text: displayedCard().description"></p>
+        Etykiety:
+        <!-- ko foreach:tags -->
+        <span class="label-success" data-bind="text: content, style: {backgroundColor: colour}"></span>
+        <!-- /ko -->
+        <button type="button" class="btn btn-primary" data-bind="click: alterCardTag">Zmień</button>
+        <p data-bind="text: displayedCard().description"></p>
+
         <form>
           <div class="form-group">
             <label for="new-card-comment" class="control-label">Dodaj komentarz:</label>
             <textarea class="form-control" id="new-card-comment"></textarea>
           </div>
-		  <div class="form-group">
-			<button type="button" class="btn btn-primary" data-bind="click: addComment">Wyślij</button>
-		  </div>
+          <div class="form-group">
+            <button type="button" class="btn btn-primary" data-bind="click: addComment">Wyślij</button>
+          </div>
         </form>
       </div>
       <div class="modal-footer">
-		<h3>Aktywność</h3>
-		<!-- ko foreach:displayedCardComments -->
-		<p><b data-bind="text: user.username"></b> (<span data-bind="text: report_date"></span>): <span data-bind="text: content"></span> <a data-bind="click: $parent.editComment">[Edytuj]</a> <a data-bind="click: $parent.removeComment">[Usuń]</a></p>
-		<!-- /ko -->
+        <h3>Aktywność</h3>
+        <!-- ko foreach:displayedCardComments -->
+        <p><b data-bind="text: user.username"></b> (<span data-bind="text: report_date"></span>): <span data-bind="text: content"></span>          <a data-bind="click: $parent.editComment">[Edytuj]</a> <a data-bind="click: $parent.removeComment">[Usuń]</a></p>
+        <!-- /ko -->
+
       </div>
     </div>
   </div>
@@ -244,7 +290,7 @@ Tagi:
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
         <button type="button" class="btn btn-primary" data-bind="click: editCommentConfirm">Edytuj kartę</button>
-	  </div>
+      </div>
     </div>
   </div>
 </div>
@@ -289,17 +335,17 @@ Tagi:
       </div>
       <div class="modal-body">
         <form>
-		  Wybrane etykiety: 
-		  <div class="table-responsive">
-				<!-- ko foreach:boardTags -->
-			  <table class="table" data-bind="click: $parent.toggleCardTag">
-			    <tr class="table-row" data-bind="style: {backgroundColor: colour}">
-				  <td class="table-cell"><input type="checkbox" class="form-control" data-bind="attr: {id: 'new-card-tag-' + id}"></td>
-				  <td class="table-cell"><label class="checkbox inline" data-bind="attr: {for: 'new-card-tag-' + id}, text:content"></label></td>
-				</tr>
-			  </table>
-				<!-- /ko -->
-		  </div>
+          Wybrane etykiety:
+          <div class="table-responsive">
+            <!-- ko foreach:boardTags -->
+            <table class="table" data-bind="click: $parent.toggleCardTag">
+              <tr class="table-row" data-bind="style: {backgroundColor: colour}">
+                <td class="table-cell"><input type="checkbox" class="form-control" data-bind="attr: {id: 'new-card-tag-' + id}"></td>
+                <td class="table-cell"><label class="checkbox inline" data-bind="attr: {for: 'new-card-tag-' + id}, text:content"></label></td>
+              </tr>
+            </table>
+            <!-- /ko -->
+          </div>
         </form>
       </div>
       <div class="modal-footer">

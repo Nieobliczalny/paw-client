@@ -38,6 +38,21 @@ body {
     display: inline-table;
 }
 
-a{
+.linkStyle{
   color: white;
+  text-align: center;
+}
+
+.card{
+    background-color: #3232cd;
+    margin: 3px;
+    border-radius: 5px;
+    width: 100%;
+    min-height: 3ex;
+    max-height: 3ex;
+    display: inline-table;
+}
+
+.center-block {
+  margin: 0 auto;
 }
