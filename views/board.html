@@ -38,6 +38,9 @@ Tagi:
 			</tr>
 		</tbody>
 	</table>
+	<table data-bind="foreach: boardEntries" class="table">
+		<tr><td><span data-bind="text: report_date + ': ' + content"></span></td></tr>
+	</table>
 </div>
 <div data-bind="visible: board().archived">
 	Ta tablica jest zamknięta.<br>

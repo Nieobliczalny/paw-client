@@ -15,6 +15,7 @@ var BoardViewModel = function(){
 	this.likes = ko.observableArray([]);
 	this.tags = ko.observableArray([]);
 	this.boardTags = ko.observableArray([]);
+	this.boardEntries = ko.observableArray([]);
 	
 	
 	var self = this;
@@ -53,6 +54,13 @@ var BoardViewModel = function(){
 			
 			TrelloApi.boards.at(self.boardId).tags.get(function(data){
 				self.boardTags(data);
+			}, function(error){
+				console.error(error);
+			});
+			
+			TrelloApi.boards.at(self.boardId).entry.get(function(data){
+				data = data.sort(function(a, b){ return b.id-a.id;});
+				self.boardEntries(data);
 			}, function(error){
 				console.error(error);
 			});
