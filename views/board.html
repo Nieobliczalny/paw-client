@@ -248,7 +248,6 @@ Polubień: <span data-bind="text: likesCount, click: toggleLike"></span><br> Tag
         <!-- /ko -->
         <button type="button" class="btn btn-primary" data-bind="click: alterCardTag">Zmień</button>
         <p data-bind="text: displayedCard().description"></p>
-
         <form>
           <div class="form-group">
             <label for="new-card-comment" class="control-label">Dodaj komentarz:</label>
@@ -264,7 +263,6 @@ Polubień: <span data-bind="text: likesCount, click: toggleLike"></span><br> Tag
         <!-- ko foreach:displayedCardComments -->
         <p><b data-bind="text: user.username"></b> (<span data-bind="text: report_date"></span>): <span data-bind="text: content"></span>          <a data-bind="click: $parent.editComment">[Edytuj]</a> <a data-bind="click: $parent.removeComment">[Usuń]</a></p>
         <!-- /ko -->
-
       </div>
     </div>
   </div>
