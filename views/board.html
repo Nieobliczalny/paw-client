@@ -215,7 +215,7 @@ Tagi:
       <div class="modal-footer">
 		<h3>Aktywność</h3>
 		<!-- ko foreach:displayedCardComments -->
-		<p><b data-bind="text: user.username"></b>: <span data-bind="text: content"></span> <a data-bind="click: $parent.editComment">[Edytuj]</a> <a data-bind="click: $parent.removeComment">[Usuń]</a></p>
+		<p><b data-bind="text: user.username"></b> (<span data-bind="text: report_date"></span>): <span data-bind="text: content"></span> <a data-bind="click: $parent.editComment">[Edytuj]</a> <a data-bind="click: $parent.removeComment">[Usuń]</a></p>
 		<!-- /ko -->
       </div>
     </div>
