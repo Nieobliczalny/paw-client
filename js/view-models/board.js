@@ -114,6 +114,7 @@ var BoardViewModel = function(){
 			TrelloApi.lists.post({name: name, boardID: self.boardId}, function(result){
 				result.cards = ko.observableArray(result.cards);
 				self.lists.push(result);
+				self.boardsData().filter(function(e, i, a){return e.id == self.boardId})[0].lists.push(result);
 				$('#addListModal').modal('hide');
 			}, function(error){
 				console.error(error);
@@ -126,6 +127,7 @@ var BoardViewModel = function(){
 		var _this = this;
 		TrelloApi.lists.post({name: name, boardID: self.boardId}, function(result){
 			result.cards = ko.observableArray(result.cards);
+			self.boardsData().filter(function(e, i, a){return e.id == self.boardId})[0].lists.push(result);
 			_this.lists.push(result);
 			el.val('');
 		}, function(error){
@@ -146,6 +148,10 @@ var BoardViewModel = function(){
 				result.cards = ko.observableArray(result.cards);
 				if (list.length > 0) self.lists.splice(self.lists.indexOf(list[0]), 1, result);
 				else self.lists.push(result);
+				var listCont = self.boardsData().filter(function(e, i, a){return e.id == self.boardId})[0].lists;
+				var list = listCont().filter(function(e, i, a){ return e.id == result.id; });
+				if (list.length > 0) listCont.splice(listCont.indexOf(list[0]), 1, result);
+				else listCont.push(result);
 				$('#editListModal').modal('hide');
 			}, function(error){
 				console.error(error);
@@ -158,6 +164,10 @@ var BoardViewModel = function(){
 			result.cards = ko.observableArray(result.cards);
 			if (list.length > 0) self.lists.splice(self.lists.indexOf(list[0]), 1, result);
 			else self.lists.push(result);
+			var listCont = self.boardsData().filter(function(e, i, a){return e.id == self.boardId})[0].lists;
+			var list = listCont().filter(function(e, i, a){ return e.id == result.id; });
+			if (list.length > 0) listCont.splice(listCont.indexOf(list[0]), 1, result);
+			else listCont.push(result);
 		}, function(error){
 			console.error(error);
 		});
@@ -168,6 +178,10 @@ var BoardViewModel = function(){
 			result.cards = ko.observableArray(result.cards);
 			if (list.length > 0) self.lists.splice(self.lists.indexOf(list[0]), 1, result);
 			else self.lists.push(result);
+			var listCont = self.boardsData().filter(function(e, i, a){return e.id == self.boardId})[0].lists;
+			var list = listCont().filter(function(e, i, a){ return e.id == result.id; });
+			if (list.length > 0) listCont.splice(listCont.indexOf(list[0]), 1, result);
+			else listCont.push(result);
 		}, function(error){
 			console.error(error);
 		});
@@ -176,6 +190,9 @@ var BoardViewModel = function(){
 		TrelloApi.lists.delete(obj.id, function(result){
 			var list = self.lists().filter(function(e, i, a){ return e.id == obj.id; });
 			if (list.length > 0) self.lists.splice(self.lists.indexOf(list[0]), 1);
+			var listCont = self.boardsData().filter(function(e, i, a){return e.id == self.boardId})[0].lists;
+			var list = listCont().filter(function(e, i, a){ return e.id == result.id; });
+			if (list.length > 0) listCont.splice(listCont.indexOf(list[0]), 1);
 		}, function(error){
 			console.error(error);
 		});
