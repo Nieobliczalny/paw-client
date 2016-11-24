@@ -219,7 +219,7 @@ var BoardViewModel = function(){
 				if (!desc) desc = self.editingCard.description;
 				if (!name) name = self.editingCard.name;
 				TrelloApi.cards.put(self.editingCard.id, {name: name, description: desc}, function(result){
-					var list = self.lists().filter(function(e, i, a){ return e.id == self.editingCard.card_list.id; });
+					var list = self.lists().filter(function(e, i, a){ return e.id == result.card_list.id; });
 					if (list.length > 0)
 					{
 						var card = list[0].cards().filter(function(e, i, a){ return e.id == result.id; });
@@ -346,7 +346,7 @@ var BoardViewModel = function(){
 		$('#showCardModal').modal('show');
 	};
 	this.addComment = function(){
-		TrelloApi.cards.at(self.displayedCard().id).comments.post({content: $('#new-card-comment').val()}, function(result){
+		TrelloApi.comments.post({content: $('#new-card-comment').val(), cardId: self.displayedCard().id}, function(result){
 			self.displayedCardComments.push(result);
 		}, function(error){
 			console.error(error);
@@ -426,6 +426,43 @@ var BoardViewModel = function(){
 				console.error(error);
 			});
 		}
+	};
+	this.toggleCardTag = function(obj){
+		if (!$('#new-card-tag-' + obj.id)[0].checked)
+		{
+			TrelloApi.cards.at(self.displayedCard().id).tags.post({tagId: obj.id}, function(result){
+				self.tags.push(result);
+				$('#new-card-tag-' + obj.id)[0].checked = true;
+			}, function(error){
+				console.error(error);
+			});
+		}
+		else
+		{
+			TrelloApi.cards.at(self.displayedCard().id).tags.delete(obj.id, function(result){
+				var comm = self.tags().filter(function(e, i, a){ return e.id == obj.id; });
+				if (comm.length > 0) self.tags.splice(self.tags().indexOf(comm[0]), 1);
+				$('#new-card-tag-' + obj.id)[0].checked = false;
+			}, function(error){
+				console.error(error);
+			});
+		}
+		return true;
+	};
+	this.alterCardTag = function(){
+		$('#changeCardTagModal').modal('show');
+		setTimeout((function(){
+			var tags = self.boardTags();
+			for (var i = 0; i < tags.length; i++)
+			{
+				$('#new-card-tag-'+tags[i].id)[0].checked = false;
+			}
+			tags = self.tags();
+			for (var i = 0; i < tags.length; i++)
+			{
+				$('#new-card-tag-'+tags[i].id)[0].checked = true;
+			}
+		}).bind(this), 50);
 	};
 };
 
