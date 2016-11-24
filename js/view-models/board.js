@@ -362,6 +362,7 @@ var BoardViewModel = function(){
 	this.addComment = function(){
 		TrelloApi.comments.post({content: $('#new-card-comment').val(), cardId: self.displayedCard().id}, function(result){
 			self.displayedCardComments.push(result);
+			$('#new-card-comment').val('')
 		}, function(error){
 			console.error(error);
 		});
