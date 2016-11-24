@@ -38,6 +38,7 @@ var BoardViewModel = function(){
 							result.sort(function(a, b){ return a.position - b.position; });
 							for (var i = 0; i < result.length; i++)
 							{
+								result[i].tags = ko.observableArray(result[i].tags);
 								self.lists()[iCopy].cards.push(result[i]);
 							}
 						}, function(error){
@@ -183,6 +184,7 @@ var BoardViewModel = function(){
 		if (name)
 		{
 			TrelloApi.cards.post({name: name, cardListID: self.newCardListID, description: desc}, function(result){
+				result.tags = ko.observableArray(result.tags);
 				var list = self.lists().filter(function(e, i, a){ return e.id == self.newCardListID; });
 				if (list.length > 0) list[0].cards.push(result);
 				$('#addCardModal').modal('hide');
@@ -196,6 +198,7 @@ var BoardViewModel = function(){
 		var name = el.val();
 		var _this = this;
 		TrelloApi.cards.post({name: name, cardListID: this.id, description: ''}, function(result){
+			result.tags = ko.observableArray(result.tags);
 			_this.cards.push(result);
 			el.val('');
 		}, function(error){
@@ -219,6 +222,7 @@ var BoardViewModel = function(){
 				if (!desc) desc = self.editingCard.description;
 				if (!name) name = self.editingCard.name;
 				TrelloApi.cards.put(self.editingCard.id, {name: name, description: desc}, function(result){
+					result.tags = ko.observableArray(result.tags);
 					var list = self.lists().filter(function(e, i, a){ return e.id == result.card_list.id; });
 					if (list.length > 0)
 					{
@@ -255,6 +259,7 @@ var BoardViewModel = function(){
 	});
 	this.unarchiveCard = function(obj){
 		TrelloApi.cards.put(obj.id, {archived: 0}, function(result){
+			result.tags = ko.observableArray(result.tags);
 			var list = self.lists().filter(function(e, i, a){ return e.id == obj.card_list.id; });
 			if (list.length > 0)
 			{
@@ -268,6 +273,7 @@ var BoardViewModel = function(){
 	};
 	this.archiveCard = function(obj){
 		TrelloApi.cards.put(obj.id, {archived: 1}, function(result){
+			result.tags = ko.observableArray(result.tags);
 			var list = self.lists().filter(function(e, i, a){ return e.id == obj.card_list.id; });
 			if (list.length > 0)
 			{
@@ -431,6 +437,15 @@ var BoardViewModel = function(){
 		if (!$('#new-card-tag-' + obj.id)[0].checked)
 		{
 			TrelloApi.cards.at(self.displayedCard().id).tags.post({tagId: obj.id}, function(result){
+				var list = self.lists().filter(function(e, i, a){ return e.id == self.displayedCard().card_list.id;});
+				if (list.length > 0)
+				{
+					var card = list[0].cards().filter(function(e, i, a){ return e.id == self.displayedCard().id;});
+					if (card.length > 0)
+					{
+						card[0].tags.push(result);
+					}
+				}
 				self.tags.push(result);
 				$('#new-card-tag-' + obj.id)[0].checked = true;
 			}, function(error){
@@ -442,6 +457,16 @@ var BoardViewModel = function(){
 			TrelloApi.cards.at(self.displayedCard().id).tags.delete(obj.id, function(result){
 				var comm = self.tags().filter(function(e, i, a){ return e.id == obj.id; });
 				if (comm.length > 0) self.tags.splice(self.tags().indexOf(comm[0]), 1);
+				var list = self.lists().filter(function(e, i, a){ return e.id == self.displayedCard().card_list.id;});
+				if (list.length > 0)
+				{
+					var card = list[0].cards().filter(function(e, i, a){ return e.id == self.displayedCard().id;});
+					if (card.length > 0)
+					{
+						var comm = card[0].tags.filter(function(e, i, a){ return e.id == obj.id; });
+						if (comm.length > 0) card[0].tags.splice(card[0].tags.indexOf(comm[0]), 1);
+					}
+				}
 				$('#new-card-tag-' + obj.id)[0].checked = false;
 			}, function(error){
 				console.error(error);

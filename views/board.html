@@ -25,7 +25,7 @@ Tagi:
 					<table class="table">
 						<tbody data-bind="foreach: cards">
 							<tr data-bind="dragZone: { name: 'tasks' }, dropZone: { accepts: 'tasks', drop: $parentContext.$parent.drop }">
-								<td><span data-bind="text: name, click: $parentContext.$parent.showCard"></span> <a data-bind="click: $parentContext.$parent.editCard, visible: !$data.archived">[Edytuj nazwę / opis]</a> <a data-toggle="modal" data-target="#selectListModal" data-bind="click: $parentContext.$parent.moveCard, visible: !$data.archived">[Przenieś]</a> <a data-bind="click: $parentContext.$parent.archiveCard, visible: !$data.archived">[Archiwizuj]</a> <a data-bind="click: $parentContext.$parent.unarchiveCard, visible: $data.archived">[Przywróć]</a> <a data-bind="click: $parentContext.$parent.deleteCard, visible: $data.archived">[Usuń]</a></td>
+								<td><span data-bind="foreach: $data.tags"><span class="label-success" data-bind="text: content, style: {backgroundColor: colour}"></span></span><span data-bind="text: name, click: $parentContext.$parent.showCard"></span> <a data-bind="click: $parentContext.$parent.editCard, visible: !$data.archived">[Edytuj nazwę / opis]</a> <a data-toggle="modal" data-target="#selectListModal" data-bind="click: $parentContext.$parent.moveCard, visible: !$data.archived">[Przenieś]</a> <a data-bind="click: $parentContext.$parent.archiveCard, visible: !$data.archived">[Archiwizuj]</a> <a data-bind="click: $parentContext.$parent.unarchiveCard, visible: $data.archived">[Przywróć]</a> <a data-bind="click: $parentContext.$parent.deleteCard, visible: $data.archived">[Usuń]</a></td>
 							</tr>
 						</tbody>
 						<tbody>
