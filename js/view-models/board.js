@@ -540,6 +540,19 @@ var BoardViewModel = function(){
 			}
 		}).bind(this), 50);
 	};
+	
+	this.addAttachment = function(){
+		$('#new-attachment').val('');
+		$('#addAttachmentModal').modal('show');
+	};
+	
+	this.addAttachmentConfirm = function(){
+		TrelloApi.cards.at(self.displayedCard().id).attachments.postRawFormData('addAttachmentForm', function(result){
+			console.info(result);
+		}, function(error){
+			console.error(error);
+		});
+	}
 };
 
 var BoardViewModelObj = new BoardViewModel();

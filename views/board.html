@@ -245,11 +245,14 @@ Polubień: <span data-bind="text: likesCount, click: toggleLike"></span><br> Tag
         <h4 class="modal-title" id="showCardModalLabel" data-bind="text: displayedCard().name"></h4>
       </div>
       <div class="modal-body">
-        Etykiety:
-        <!-- ko foreach:tags -->
-        <span class="label-success" data-bind="text: content, style: {backgroundColor: colour}"></span>
-        <!-- /ko -->
-        <button type="button" class="btn btn-primary" data-bind="click: alterCardTag">Zmień</button>
+        <p>
+          Etykiety:
+          <!-- ko foreach:tags -->
+          <span class="label-success" data-bind="text: content, style: {backgroundColor: colour}"></span>
+          <!-- /ko -->
+          <button type="button" class="btn btn-primary" data-bind="click: alterCardTag">Zmień</button>
+        </p>
+        <p>Załączniki: <button type="button" class="btn btn-primary" data-bind="click: addAttachment">Dodaj</button></p>
         <p data-bind="text: displayedCard().description"></p>
         <form>
           <div class="form-group">
@@ -356,3 +359,28 @@ Polubień: <span data-bind="text: likesCount, click: toggleLike"></span><br> Tag
   </div>
 </div>
 <!-- End of Modal - change Card Tag -->
+
+<!-- Modal - add Attachment -->
+<div class="modal fade" id="addAttachmentModal" tabindex="-1" role="dialog" aria-labelledby="addAttachmentModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="addAttachmentModalLabel">Dodanie załącznika</h4>
+      </div>
+      <div class="modal-body">
+        <form id="addAttachmentForm">
+          <div class="form-group">
+            <label for="new-attachment" class="control-label">Plik:</label>
+            <input type="file" class="form-control" id="new-attachment" name="file">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+        <button type="button" class="btn btn-primary" data-bind="click: addAttachmentConfirm">Dodaj</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End of Modal - add Attachment -->

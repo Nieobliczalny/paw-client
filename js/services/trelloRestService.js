@@ -1,13 +1,19 @@
 function AjaxWrapper(apiPrefix)
 {
 	this.apiPrefix = apiPrefix;
-	this.send = (function(url, method, data, successCallback, failureCallback){
-		$.ajax({
+	this.send = (function(url, method, data, successCallback, failureCallback, extra){
+		extra = extra || {};
+		var options = {
 			url: this.apiPrefix + url,
 			dataType: 'json',
 			method: method,
 			data: data
-		})
+		};
+		for (var i in extra)
+		{
+			options[i] = extra[i];
+		}
+		$.ajax(options)
 		.done(successCallback)
 		.fail(failureCallback);
 	}).bind(this);
@@ -99,6 +105,50 @@ function RestResource(apiPrefix, resourceName, options, childResources)
 		}
 		return childResource;
 	}).bind(this);
+	this.postRawFormData = (function(formID, success, failure) {
+		var formData = new FormData();
+		//Pobranie i dodanie do formData wszystkich danych formularza
+		var formEl = document.getElementById(formID);
+		var inputs = formEl.getElementsByTagName('input');
+		for (var i = 0; i < inputs.length; i++)
+		{
+			var type = inputs[i].getAttribute('type').toLocaleLowerCase();
+			if (type == 'file')
+			{
+				formData.append(inputs[i].getAttribute('name'), inputs[i].files[0], inputs[i].files[0].name);
+			}
+			else if (type == 'radio' || type == 'checkbox')
+			{
+				if (inputs[i].checked) formData.append(inputs[i].getAttribute('name'), inputs[i].value);
+			}
+			else
+			{
+				formData.append(inputs[i].getAttribute('name'), inputs[i].value);
+			}
+		}
+		var selects = formEl.getElementsByTagName('select');
+		for (var i = 0; i < selects.length; i++)
+		{
+			formData.append(selects[i].getAttribute('name'), selects[i].value);
+		}
+		var textareas = formEl.getElementsByTagName('textarea');
+		for (var i = 0; i < textareas.length; i++)
+		{
+			formData.append(textareas[i].getAttribute('name'), textareas[i].innerText);
+		}
+		//Wysłanie formularza
+		var request = new XMLHttpRequest();
+		request.open("POST", this.apiPrefix + this.resourceName);
+		request.onreadystatechange = function () {
+			if(request.readyState === XMLHttpRequest.DONE)
+			{
+				var response = request.responseType == 'json' ? request.response : JSON.parse(request.response);
+				if (request.status >= 200 && request.status <= 299) success(response);
+				else failure(response);
+			}
+		};
+		request.send(formData);
+	}).bind(this);
 }
 
 function TrelloRestService(apiPrefix)
@@ -113,6 +163,7 @@ function TrelloRestService(apiPrefix)
 	this.cards = new RestResource(apiPrefix, 'cards');
 	this.cards.addChildResource('comments');
 	this.cards.addChildResource('tags');
+	this.cards.addChildResource('attachments');
 	this.comments = new RestResource(apiPrefix, 'comments');
 	this.likes = new RestResource(apiPrefix, 'likes');
 	this.tags = new RestResource(apiPrefix, 'tags');
