@@ -25,6 +25,16 @@ var BoardViewModel = function(){
 		self.boardId = page.page.pageRoute.params.boardId;
 		self.lists([]);
 		self.board({});
+		self.card({});
+		self.list({});
+		self.editingCard = {};
+		self.displayedCard({});
+		self.displayedCardComments([]);
+		self.editedComment({});
+		self.likes([]);
+		self.tags([]);
+		self.boardTags([]);
+		self.boardEntries([]);
 		TrelloApi.boards.getById(self.boardId, function(result){
 			self.board(result);
 			//console.info(self.boardId);
@@ -377,6 +387,8 @@ var BoardViewModel = function(){
 		});
 	};
 	this.showCard = function(obj){
+		self.displayedCardComments([]);
+		self.tags([]);
 		self.displayedCard(obj);
 		TrelloApi.cards.at(obj.id).comments.get(function(result){
 			self.displayedCardComments(result);
