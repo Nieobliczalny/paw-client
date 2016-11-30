@@ -66,6 +66,10 @@ var IndexViewModel = function() {
 			console.log('Nie udało się wylogować, spróbuj ponownie!');
 		});
 	};
+	
+	this.changeLang = function(context, event){
+		i18nextko.setLanguage(event.target.value);
+	}
 
 
 	TrelloApi.loggeduser.get(function(data){
