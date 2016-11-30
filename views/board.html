@@ -5,6 +5,10 @@ Polubień: <span data-bind="text: likesCount, click: toggleLike"></span><br> Tag
 <!-- /ko -->
 <a data-bind="click: addBoardTag">Dodaj</a>
 <br>
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon3">Udostępnij tablicę: </span>
+  <input type="text" class="form-control" readonly data-bind="value: boardUrl">
+</div>
 <div data-bind="visible: !board().archived">
   <a data-bind="click: addList">Dodaj listę</a>
 
@@ -252,6 +256,14 @@ Polubień: <span data-bind="text: likesCount, click: toggleLike"></span><br> Tag
           <!-- /ko -->
           <button type="button" class="btn btn-primary" data-bind="click: alterCardTag">Zmień</button>
         </p>
+		<p>Koniec: <span data-bind="text: displayedCard().date, visible: displayedCard().date!='null'"></span>
+		<div class="input-group date">
+		  <input type="text" class="form-control" id="new-deadline">
+		  <span class="input-group-btn">
+			<button class="btn btn-primary" type="button" data-bind="click: updateCardDeadline">Zmień</button>
+		  </span>
+		</div>
+		</p>
         <p>Załączniki: <button type="button" class="btn btn-primary" data-bind="click: addAttachment">Dodaj</button></p>
         <p data-bind="text: displayedCard().description"></p>
         <form>
