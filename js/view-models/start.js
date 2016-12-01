@@ -7,6 +7,7 @@ var StartViewModel = function() {
 	this.editingBoardID = -1;
 	var self = this;
 	this.update = function(){
+    Intervals.clear();
 		TrelloApi.boards.get(function(data){
 			self.boards = data;
 			self.boardsFiltered(self.applyFilter(self.boards, self.filter()));

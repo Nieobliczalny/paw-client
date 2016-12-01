@@ -158,6 +158,7 @@ function TrelloRestService(apiPrefix)
 	this.boards.addChildResource('likes');
 	this.boards.addChildResource('tags');
 	this.boards.addChildResource('entry');
+	this.boards.addChildResource('entries');
 	this.lists = new RestResource(apiPrefix, 'lists');
 	this.lists.addChildResource('cards');
 	this.cards = new RestResource(apiPrefix, 'cards');

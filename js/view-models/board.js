@@ -20,9 +20,28 @@ var BoardViewModel = function(){
 	
 	
 	var self = this;
+  
+  this.refreshActivityLog = function(){
+    var latestEntryId = this.boardEntries().reduce(function(previousValue, currentValue, index, array) {
+      return Math.max(previousValue, currentValue.id);
+    }, 0);
+    TrelloApi.boards.at(this.boardId).entries.getById(latestEntryId, function(result){
+      var x = Object.keys(result);
+      var y = [];
+      for (var i = 0; i < x.length; i++)
+      {
+        y.push(result[x[i]]);
+      }
+      self.boardEntries(self.boardEntries().concat(y).sort(function(a, b){ return b.id-a.id;}));
+    }, function(error){
+      console.error(error);
+    });
+  };
 	
 	this.update = function(page){
 		if (!page || !page.page || !page.page.pageRoute || !page.page.pageRoute.params) return;
+    Intervals.clear();
+    Intervals.add('refreshActivityLog', self.refreshActivityLog.bind(self), 30000);
 		self.boardId = page.page.pageRoute.params.boardId;
 		self.boardUrl(window.location.href);
 		self.lists([]);
@@ -127,6 +146,7 @@ var BoardViewModel = function(){
 				result.cards = ko.observableArray(result.cards);
 				self.lists.push(result);
 				self.boardsData().filter(function(e, i, a){return e.id == self.boardId})[0].lists.push(result);
+        self.refreshActivityLog();
 				$('#addListModal').modal('hide');
 			}, function(error){
 				console.error(error);
@@ -142,6 +162,7 @@ var BoardViewModel = function(){
 			self.boardsData().filter(function(e, i, a){return e.id == self.boardId})[0].lists.push(result);
 			_this.lists.push(result);
 			el.val('');
+      self.refreshActivityLog();
 		}, function(error){
 			console.error(error);
 		});
@@ -164,6 +185,7 @@ var BoardViewModel = function(){
 				var list = listCont().filter(function(e, i, a){ return e.id == result.id; });
 				if (list.length > 0) listCont.splice(listCont.indexOf(list[0]), 1, result);
 				else listCont.push(result);
+        self.refreshActivityLog();
 				$('#editListModal').modal('hide');
 			}, function(error){
 				console.error(error);
@@ -180,6 +202,7 @@ var BoardViewModel = function(){
 			var list = listCont().filter(function(e, i, a){ return e.id == result.id; });
 			if (list.length > 0) listCont.splice(listCont.indexOf(list[0]), 1, result);
 			else listCont.push(result);
+      self.refreshActivityLog();
 		}, function(error){
 			console.error(error);
 		});
@@ -194,6 +217,7 @@ var BoardViewModel = function(){
 			var list = listCont().filter(function(e, i, a){ return e.id == result.id; });
 			if (list.length > 0) listCont.splice(listCont.indexOf(list[0]), 1, result);
 			else listCont.push(result);
+      self.refreshActivityLog();
 		}, function(error){
 			console.error(error);
 		});
@@ -205,6 +229,7 @@ var BoardViewModel = function(){
 			var listCont = self.boardsData().filter(function(e, i, a){return e.id == self.boardId})[0].lists;
 			var list = listCont().filter(function(e, i, a){ return e.id == result.id; });
 			if (list.length > 0) listCont.splice(listCont.indexOf(list[0]), 1);
+      self.refreshActivityLog();
 		}, function(error){
 			console.error(error);
 		});
@@ -224,6 +249,7 @@ var BoardViewModel = function(){
 				result.tags = ko.observableArray(result.tags);
 				var list = self.lists().filter(function(e, i, a){ return e.id == self.newCardListID; });
 				if (list.length > 0) list[0].cards.push(result);
+        self.refreshActivityLog();
 				$('#addCardModal').modal('hide');
 			}, function(error){
 				console.error(error);
@@ -238,6 +264,7 @@ var BoardViewModel = function(){
 			result.tags = ko.observableArray(result.tags);
 			_this.cards.push(result);
 			el.val('');
+      self.refreshActivityLog();
 		}, function(error){
 			console.error(error);
 		});
@@ -268,6 +295,7 @@ var BoardViewModel = function(){
 						else list[0].cards.push(result);
 					}
 					$('#editCardModal').modal('hide');
+          self.refreshActivityLog();
 				}, function(error){
 					console.error(error);
 				});
@@ -304,6 +332,7 @@ var BoardViewModel = function(){
 				if (card.length > 0) list[0].cards.splice(list[0].cards.indexOf(card[0]), 1, result);
 				else list[0].cards.push(result);
 			}
+      self.refreshActivityLog();
 		}, function(error){
 			console.error(error);
 		});
@@ -318,6 +347,7 @@ var BoardViewModel = function(){
 				if (card.length > 0) list[0].cards.splice(list[0].cards.indexOf(card[0]), 1, result);
 				else list[0].cards.push(result);
 			}
+      self.refreshActivityLog();
 		}, function(error){
 			console.error(error);
 		});
@@ -330,6 +360,7 @@ var BoardViewModel = function(){
 				var card = list[0].cards().filter(function(e, i, a){ return e.id == obj.id; });
 				if (card.length > 0) list[0].cards.splice(list[0].cards.indexOf(card[0]), 1);
 			}
+      self.refreshActivityLog();
 		}, function(error){
 			console.error(error);
 		});
@@ -368,6 +399,7 @@ var BoardViewModel = function(){
 				destList.cards.splice(newPosition - 1, 0, movedObj);
 				movedObj.position = newPosition;
 			}
+      self.refreshActivityLog();
 		}, function(error){
 			console.error(error);
 			self.SelectListMessage('Błąd aktualizacji danych, spróbuj ponownie!');
@@ -384,6 +416,7 @@ var BoardViewModel = function(){
 	this.openBoard = function(){
 		TrelloApi.boards.put(self.boardId, {archived: 0}, function(result){
 			self.board(result);
+      self.refreshActivityLog();
 		}, function(error){
 			console.error(error);
 		});
@@ -408,6 +441,7 @@ var BoardViewModel = function(){
 	this.addComment = function(){
 		TrelloApi.comments.post({content: $('#new-card-comment').val(), cardId: self.displayedCard().id}, function(result){
 			self.displayedCardComments.push(result);
+      self.refreshActivityLog();
 			$('#new-card-comment').val('')
 		}, function(error){
 			console.error(error);
@@ -415,6 +449,7 @@ var BoardViewModel = function(){
 	};
 	this.removeComment = function(obj){
 		TrelloApi.comments.delete(obj.id, function(result){
+      self.refreshActivityLog();
 			var comm = self.displayedCardComments().filter(function(e, i, a){ return e.id == obj.id; });
 			if (comm.length > 0) self.displayedCardComments.splice(self.displayedCardComments().indexOf(comm[0]), 1);
 		}, function(error){
@@ -431,6 +466,7 @@ var BoardViewModel = function(){
 			var comm = self.displayedCardComments().filter(function(e, i, a){ return e.id == self.editedComment().id; });
 			if (comm.length > 0) self.displayedCardComments.splice(self.displayedCardComments().indexOf(comm[0]), 1, result);
 			else self.displayedCardComments.push(result);
+      self.refreshActivityLog();
 			$('#editCommentModal').modal('hide');
 		}, function(error){
 			console.error(error);
@@ -442,6 +478,7 @@ var BoardViewModel = function(){
 		{
 			TrelloApi.likes.delete(currentLike[0].id, function(result){
 				self.likes.splice(self.likes().indexOf(currentLike[0]), 1);
+        self.refreshActivityLog();
 			}, function(error){
 				console.error(error);
 			});
@@ -450,6 +487,7 @@ var BoardViewModel = function(){
 		{
 			TrelloApi.likes.post({boardId: self.boardId}, function(result){
 				self.likes.push(result);
+        self.refreshActivityLog();
 			}, function(error){
 				console.info(error);
 			});
@@ -480,6 +518,7 @@ var BoardViewModel = function(){
 					if (comm.length > 0) card[j].tags.splice(card[j].tags().indexOf(comm[j]), 1);
 				}
 			}
+      self.refreshActivityLog();
 		}, function(error){
 			console.error(error);
 		});
@@ -493,6 +532,7 @@ var BoardViewModel = function(){
 			TrelloApi.tags.post({content: name, colour: color, boardId: self.boardId}, function(result){
 				self.boardTags.push(result);
 				$('#addBoardTagModal').modal('hide');
+        self.refreshActivityLog();
 			}, function(error){
 				console.error(error);
 			});
@@ -513,6 +553,7 @@ var BoardViewModel = function(){
 					}
 				}
 				self.tags.push(result);
+        self.refreshActivityLog();
 				$('#new-card-tag-' + obj.id)[0].checked = true;
 			}, function(error){
 				console.error(error);
@@ -533,6 +574,7 @@ var BoardViewModel = function(){
 						if (comm.length > 0) card[0].tags.splice(card[0].tags().indexOf(comm[0]), 1);
 					}
 				}
+        self.refreshActivityLog();
 				$('#new-card-tag-' + obj.id)[0].checked = false;
 			}, function(error){
 				console.error(error);
@@ -564,6 +606,7 @@ var BoardViewModel = function(){
 	this.addAttachmentConfirm = function(){
 		TrelloApi.cards.at(self.displayedCard().id).attachments.postRawFormData('addAttachmentForm', function(result){
 			console.info(result);
+      self.refreshActivityLog();
 		}, function(error){
 			console.error(error);
 		});
@@ -582,6 +625,7 @@ var BoardViewModel = function(){
 					else list[0].cards.push(result);
 					self.showCard(result);
 				}
+        self.refreshActivityLog();
 				$('#editCardModal').modal('hide');
 			}, function(error){
 				console.error(error);
