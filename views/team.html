@@ -1,0 +1,78 @@
+<h1> Grupy </h1>
+<br/><button class="btn btn-primary active " style=" vertical-align: middle; "data-bind="click: addTeam">Dodaj grupę</button><br/></br>
+
+<div >
+	<div data-bind="foreach: teams">
+		<div class="boardTd">
+            <h3 style="color: white; text-align: center;" data-bind="text: name"></h3> <br/>
+            <a class="btn btn-primary btn-xs linkStyle" data-bind="click: $parent.renameTeam">Zmień nazwę</a> 
+            <a class="btn btn-primary btn-xs linkStyle" data-bind="click: $parent.deleteTeam">Usuń grupę</a><br/><br/>
+            <div>
+                Członkowie:
+                <div data-bind="foreach: users">
+                    <span><a data-bind="text: username"></a>
+                    <a data-bind="click: $parentContext.$parent.deleteUser" class="btn btn-primary btn-xs linkStyle">Usuń użytkownika</a>
+            	</div>
+                <a data-bind="click: $parent.addUser" class="btn btn-primary btn-xs linkStyle">Dodaj użytkownika</a>
+            </div>
+            <div>
+                tablice:
+                <div data-bind="foreach: boards">
+                    <span><a  data-bind="text: name"></a>
+            	</div>
+                <a data-bind="click: $parent.addBoard" class="btn btn-primary btn-xs linkStyle">Dodaj tablicę</a>
+
+            </div>
+		</div>
+	</div>
+    
+</div>
+
+
+<!-- Dodawanie teamu -->
+<div class="modal fade" id="addTeamModal" tabindex="-1" role="dialog" aria-labelledby="addTeamModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="addTeamModalLabel">Nowa grupa</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="new-team-name" class="control-label">Nazwa:</label>
+            <input type="text" class="form-control" id="new-team-name">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+        <button type="button" class="btn btn-primary" data-bind="click: addTeam2">Utwórz grupę</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="editTeamModal" tabindex="-1" role="dialog" aria-labelledby="editTeamModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="editTeamModalLabel">Zmiana nazwy grupy</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="ex-team-name" class="control-label">Nowa nazwa:</label>
+            <input type="text" class="form-control" id="ex-team-name">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+        <button type="button" class="btn btn-primary" data-bind="click: editTeam">Edytuj grupę</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="./favicon.ico">
 
-    <title>PAW Project</title>
+    <title>Trollo - PHP Rulz</title>
 
     <!-- Bootstrap core CSS -->
     <link href="./css/bootstrap.min.css" rel="stylesheet">
@@ -28,7 +28,6 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-
   <body>
 
     <nav class="navbar navbar-inverse navbar-fixed-top " style="background-color: #3232cd">
@@ -40,7 +39,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Trello clone</a>
+          <a class="navbar-brand" href="#">Trollo - PHP Rulz</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse ">
           <ul class="nav navbar-nav">
@@ -48,6 +47,9 @@
           </ul>
           <ul class="nav navbar-nav">
             <li class="active"><a href="#notifications">Powiadomienia</a></li>
+          </ul>
+           <ul class="nav navbar-nav">
+            <li class=""><a href="#team">Grupy</a></li>
           </ul>
           <ul class="nav navbar-nav loggout" data-bind="visible: isLoggedUser, click: loggoutClick">
             <li class=""><a>Wyloguj</a></li>
@@ -76,7 +78,7 @@
         <div data-bind="page: {id: 'start', source: './views/start.html', 'with': StartViewModelObj, beforeShow: StartViewModelObj.update}" style="display: none"></div>
         <div data-bind="page: {id: 'board', source: './views/board.html', params: ['boardId'], 'with': BoardViewModelObj, beforeShow: BoardViewModelObj.update}" style="display: none"></div>
         <div data-bind="page: {id: 'notifications', source: './views/notifications.html', 'with': NotificationsViewModelObj, beforeShow: NotificationsViewModelObj.update}" style="display: none"></div>
-        
+        <div data-bind="page: {id: 'team', source: './views/team.html', 'with': TeamViewModelObj, beforeShow: TeamViewModelObj.update}" style="display: none"></div>
       </div>
 
     </div><!-- /.container -->
@@ -155,6 +157,8 @@
 	<script src="./js/view-models/start.js"></script>
 	<script src="./js/view-models/board.js"></script>
 	<script src="./js/view-models/notifications.js"></script>
+  <script src="./js/view-models/team.js"></script>
 	<script src="./js/view-models/index.js"></script>
+
   </body>
 </html>
