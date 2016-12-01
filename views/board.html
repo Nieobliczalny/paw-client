@@ -279,7 +279,8 @@ Polubień: <span data-bind="text: likesCount, click: toggleLike"></span><br> Tag
         Załączniki: 
         <button type="button" class="btn btn-primary" data-bind="click: addAttachment">Dodaj</button>
         <!-- ko foreach:cardAttachments -->
-        <a class="label-default" data-bind="attr: {href: '/paw-server/web/uploads/' + boardId + '/' + name}, text: name"></a>
+        <a class="label-success" data-bind="attr: {href: '/paw-server/web/uploads/' + $parent.boardId + '/' + path}, text: path"></a>
+		<a class="label-danger" data-bind="click: $parent.removeAttachment">[X]</a>
         <!-- /ko -->
         </p>
         <p data-bind="text: displayedCard().description"></p>

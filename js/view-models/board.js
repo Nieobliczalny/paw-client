@@ -429,6 +429,7 @@ var BoardViewModel = function(){
 		self.displayedCardComments([]);
 		self.tags([]);
 		self.displayedCard(obj);
+		self.cardAttachments(obj.attachments);
     //TODO: Ustawić wartość dla cardSubscribe
     self.cardSub = self.cardSubscribe.subscribe(function(newValue) {
       //TODO: Wysłać na serwer info o zmianie statusu
@@ -613,8 +614,18 @@ var BoardViewModel = function(){
 	
 	this.addAttachmentConfirm = function(){
 		TrelloApi.cards.at(self.displayedCard().id).attachments.postRawFormData('addAttachmentForm', function(result){
-			console.info(result);
-      self.refreshActivityLog();
+			self.cardAttachments.push(result);
+			var list = self.lists().filter(function(e, i, a){ return e.id == self.displayedCard().card_list.id;});
+			if (list.length > 0)
+			{
+				var card = list[0].cards().filter(function(e, i, a){ return e.id == self.displayedCard().id;});
+				if (card.length > 0 && card[0].attachments.indexOf(result) < 0)
+				{
+					card[0].attachments.push(result);
+				}
+			}
+			$('#addAttachmentModal').modal('hide');
+			self.refreshActivityLog();
 		}, function(error){
 			console.error(error);
 		});
@@ -639,6 +650,25 @@ var BoardViewModel = function(){
 				console.error(error);
 			});
 		}
+	};
+	this.removeAttachment = function(obj){
+		TrelloApi.cards.at(self.displayedCard().id).attachments.delete(obj.id, function(result){
+			var card = self.cardAttachments().filter(function(e, i, a){ return e.id == obj.id; });
+			if (card.length > 0) self.cardAttachments.splice(self.cardAttachments.indexOf(card[0]), 1);
+			var list = self.lists().filter(function(e, i, a){ return e.id == self.displayedCard().card_list.id;});
+			if (list.length > 0)
+			{
+				var card = list[0].cards().filter(function(e, i, a){ return e.id == self.displayedCard().id;});
+				if (card.length > 0)
+				{
+					var at = card[0].attachments.filter(function(e, i, a){ return e.id == obj.id; });
+					if (at.length > 0) card[0].attachments.splice(card[0].attachments.indexOf(at[0]), 1);
+				}
+			}
+			self.refreshActivityLog();
+		}, function(error){
+			console.error(error);
+		});
 	};
 };
 
