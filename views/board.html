@@ -264,6 +264,17 @@ Polubień: <span data-bind="text: likesCount, click: toggleLike"></span><br> Tag
 		  </span>
 		</div>
 		</p>
+    <p>
+    Subskrybuj kartę: 
+    <div class="btn-group" data-toggle="buttons">
+      <label class="btn btn-primary">
+        <input type="radio" name="options" value="1" data-bind="bsChecked: cardSubscribe, checkedValue: true" autocomplete="off"> TAK
+      </label>
+      <label class="btn btn-primary active">
+        <input type="radio" name="options" value="0" data-bind="bsChecked: cardSubscribe, checkedValue: false" autocomplete="off"> NIE
+      </label>
+    </div>
+    </p>
         <p>Załączniki: <button type="button" class="btn btn-primary" data-bind="click: addAttachment">Dodaj</button></p>
         <p data-bind="text: displayedCard().description"></p>
         <form>

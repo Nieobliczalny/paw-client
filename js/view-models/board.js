@@ -12,6 +12,7 @@ var BoardViewModel = function(){
 	this.editingCard = {};
 	this.displayedCard = ko.observable({});
 	this.displayedCardComments = ko.observableArray([]);
+	this.cardSubscribe = ko.observable(false);
 	this.editedComment = ko.observable({});
 	this.likes = ko.observableArray([]);
 	this.tags = ko.observableArray([]);
@@ -422,10 +423,16 @@ var BoardViewModel = function(){
 		});
 	};
 	this.showCard = function(obj){
+    if (self.cardSub) self.cardSub.dispose();
 		$('#new-deadline').datepicker({});
 		self.displayedCardComments([]);
 		self.tags([]);
 		self.displayedCard(obj);
+    //TODO: Ustawić wartość dla cardSubscribe
+    self.cardSub = self.cardSubscribe.subscribe(function(newValue) {
+      //TODO: Wysłać na serwer info o zmianie statusu
+      console.info('cardSub', newValue);
+    });
 		TrelloApi.cards.at(obj.id).comments.get(function(result){
 			self.displayedCardComments(result);
 		}, function(error){
