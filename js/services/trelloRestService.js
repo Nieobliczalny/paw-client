@@ -173,6 +173,7 @@ function TrelloRestService(apiPrefix)
 	this.user = new RestResource(apiPrefix, 'users');
 	this.logins = new RestResource(apiPrefix, 'logins');
 	this.logout = new RestResource(apiPrefix, 'logouts', {disableGetById: true, disableGet: true, disablePut: true, disableDelete: true});
+	this.notifications = new RestResource(apiPrefix, 'notifications');
 }
 
 var apiPrefix = 'http://localhost:8080/paw-server/web/app_dev.php/api/';

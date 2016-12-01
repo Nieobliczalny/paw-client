@@ -1,0 +1,10 @@
+<h1>Powiadomienia</h1>
+<a class="btn btn-primary" data-bind="click: markAllAsRead">Oznacz wszystkie jako przeczytane</a> 
+<div >
+	<div data-bind="foreach: notifications">
+		<div class="boardTd">
+        <span class="label-danger" data-bind="visible: !read, click: $parent.markAsRead">Nieprzeczytane!</span>
+        <span class="linkStyle" data-bind="text: name"></span> <br/>
+		</div>
+	</div>
+</div>
