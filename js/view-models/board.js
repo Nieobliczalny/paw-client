@@ -615,7 +615,7 @@ var BoardViewModel = function(){
 		var date = $('#new-deadline').val() || 'null';
 		if (date)
 		{
-			TrelloApi.cards.put(self.editingCard.id, {date: date}, function(result){
+			TrelloApi.cards.put(self.displayedCard().id, {date: date}, function(result){
 				result.tags = ko.observableArray(result.tags);
 				var list = self.lists().filter(function(e, i, a){ return e.id == result.card_list.id; });
 				if (list.length > 0)
