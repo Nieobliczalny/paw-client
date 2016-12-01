@@ -18,6 +18,7 @@ var BoardViewModel = function(){
 	this.tags = ko.observableArray([]);
 	this.boardTags = ko.observableArray([]);
 	this.boardEntries = ko.observableArray([]);
+  this.cardAttachments = ko.observableArray([]);
 	
 	
 	var self = this;
